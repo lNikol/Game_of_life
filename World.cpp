@@ -1,4 +1,6 @@
 ﻿#include "World.h"
+#include "Animal.h"
+#include "Plant.h"
 #include <iostream>
 using namespace std;
 
@@ -10,11 +12,11 @@ World::World(const short& N, const short& M) :N(N), M(M) {
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
 			if (j % 2 == 0) {
-				wek[i][j] = new Plant("nic","kwiat", j * 2 + 1, i * 2 + 2, 0, j, i);
+				wek[i][j] = new Plant("nic","kwiat", j * 2 + 1, i * 2 + 2, 0, j, i, this);
 				plants.push_back(wek[i][j]); // robię vector wskaźników na rośliny
 			}
 			else {
-				wek[i][j] = new Animal("nic", "animal", j * 2 + 1, i * 2 + 2, 0, j, i);
+				wek[i][j] = new Animal("nic", "animal", j * 2 + 1, i * 2 + 2, 0, j, i, this);
 				animals.push_back(wek[i][j]); // robię vector wskaźników na zwierzęta
 			}
 		}

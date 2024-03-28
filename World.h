@@ -1,17 +1,16 @@
 #pragma once
 #include "Organism.h"
-#include "Plant.h"
-#include "Animal.h"
+//#include "Plant.h"
+//#include "Animal.h"
 #include <vector>
-using namespace std;
 
 class World {
 private:
 	short N = 0, M = 0;
-	vector<Organism*> plants;
-	vector<Organism*> animals;
+	std::vector<Organism*> plants;
+	std::vector<Organism*> animals;
 public:
-	vector < vector<Organism*>> wek;
+	std::vector < std::vector<Organism*>> wek;
 
 	World(const short& N, const short& M);
 	void takeATurn();

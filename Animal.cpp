@@ -3,14 +3,16 @@
 #include <string>
 using namespace std;
 Animal::Animal(const string& ikona, const string& name, const short& power, const short& initiative,
-	const short& age, const short& x, const short& y) ://, World* world
-	Organism(ikona, name, power, initiative, age, x, y) {//, world
+	const short& age, const short& x, const short& y, World* world) :
+	Organism(ikona, name, power, initiative, age, x, y, world) {
 
 	cout << "Animal (" << name << ", " << initiative << ", "
 		<< x << ", " << y << ") was created\n";
 }
 
-
+World* Animal::getWorld() const{
+	return world;
+}
 std::string Animal::getName() const {
 	return name;
 };
@@ -34,7 +36,7 @@ void Animal::setPosition(const short& xx, const short& yy) {
 	x = xx;
 	y = yy;
 }
-std::pair<const short&, const short&> Animal::getPosition() const {
+std::pair<const short, const short> Animal::getPosition() const {
 	return std::make_pair<const short&, const short&>(x, y);
 }
 
