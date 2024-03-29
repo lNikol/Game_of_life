@@ -1,6 +1,5 @@
 #include "Plant.h"
 #include <iostream>
-#include <string>
 using namespace std;
 Plant::Plant(const string& ikona, const string& name, const short& power, const short& initiative,
 	const short& age, const short& x, const short& y, World* world) ://, World* world
@@ -9,7 +8,9 @@ Plant::Plant(const string& ikona, const string& name, const short& power, const 
 	cout << "Plant (" << name << ", " << initiative << ", "
 		<< x << ", " << y << ") was created\n";
 }
-
+void Plant::collision(Organism* other) {
+	cout << other->getName() << endl;
+}
 World* Plant::getWorld() const {
 	return world;
 }
@@ -41,7 +42,7 @@ std::pair<const short, const short> Plant::getPosition() const {
 }
 
 void Plant::drawOrganism() const {
-	cout << "Plant:" << name<<"\n";
+	cout << "Plant:" << name << "\n";
 }
 
 void Plant::action() {

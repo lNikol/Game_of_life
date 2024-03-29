@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-//#include "World.h"
+#include <random>
 class World;
 
 class Organism {
@@ -13,7 +13,7 @@ public:
 		const short& age, const short& x, const short& y, World* w) :
 		ikona(ikona), name(name), power(power), initiative(initiative), age(age), x(x), y(y), world(w) {};
 	virtual void action() = 0;
-	//virtual void collision(Organism* org) = 0;
+	virtual void collision(Organism* org) = 0;
 	virtual void drawOrganism() const = 0;
 	virtual std::string getName() const = 0;
 	virtual short getPower() const = 0;
@@ -24,8 +24,5 @@ public:
 	virtual std::pair<const short, const short> getPosition() const = 0;
 	virtual void setPosition(const short& x, const short& y) = 0;
 	//virtual ~Organism();
-
-protected:
-	//World* w = nullptr;
 
 };

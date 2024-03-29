@@ -1,6 +1,5 @@
-#include "Animal.h"
+﻿#include "Animal.h"
 #include <iostream>
-#include <string>
 using namespace std;
 Animal::Animal(const string& ikona, const string& name, const short& power, const short& initiative,
 	const short& age, const short& x, const short& y, World* world) :
@@ -10,7 +9,8 @@ Animal::Animal(const string& ikona, const string& name, const short& power, cons
 		<< x << ", " << y << ") was created\n";
 }
 
-World* Animal::getWorld() const{
+
+World* Animal::getWorld() const {
 	return world;
 }
 std::string Animal::getName() const {
@@ -32,12 +32,13 @@ short Animal::getAge() const {
 void Animal::setAge(const short& a) {
 	age = a;
 }
+
+std::pair<const short, const short> Animal::getPosition() const {
+	return std::make_pair<const short&, const short&>(x, y);
+}
 void Animal::setPosition(const short& xx, const short& yy) {
 	x = xx;
 	y = yy;
-}
-std::pair<const short, const short> Animal::getPosition() const {
-	return std::make_pair<const short&, const short&>(x, y);
 }
 
 void Animal::drawOrganism() const {
@@ -45,5 +46,181 @@ void Animal::drawOrganism() const {
 }
 
 void Animal::action() {
-	cout << "action in Animal\n";
+	random_device rd;
+	mt19937 gen(rd());
+
+	//world->animals
+	short int width = world->getWidth() - 2;
+	short int height = world->getHeight() - 2;
+	cout << "animal " << name << " (x,y): " << x << ", " << y << " -> ";
+	if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
+		if (y == 1) {
+			if (x == 1) {
+				uniform_int_distribution<> distr(1, 2);
+				short int destination = distr(gen);
+				switch (destination) {
+				case 1: { // down
+					y += 1;
+					break;
+				}
+				case 2: { // right
+					x += 1;
+					break;
+				}
+				}
+			}
+			else if (x == width) {
+				uniform_int_distribution<> distr(1, 2);
+				short int destination = distr(gen);
+				switch (destination) {
+				case 1: { // down
+					y += 1;
+					break;
+				}
+				case 2: { // left
+					x -= 1;
+					break;
+				}
+				}
+			}
+			else {
+				uniform_int_distribution<> distr(1, 3);
+				short int destination = distr(gen);
+				switch (destination) {
+				case 1: { // down
+					y += 1;
+					break;
+				}
+				case 2: { // right
+					x += 1;
+					break;
+				}
+				case 3: { // left
+					x -= 1;
+					break;
+				}
+				}
+			}
+		}
+		else if (y == height) {
+			if (x == 1) {
+				uniform_int_distribution<> distr(1, 2);
+				short int destination = distr(gen);
+				switch (destination) {
+				case 1: { // top
+					y -= 1;
+					break;
+				}
+				case 2: { // right
+					x += 1;
+					break;
+				}
+				}
+			}
+			else if (x == width) {
+				uniform_int_distribution<> distr(1, 2);
+				short int destination = distr(gen);
+				switch (destination) {
+				case 1: { // top
+					x = x;
+					y -= 1;
+					break;
+				}
+				case 2: { // left
+					x -= 1;
+					y = y;
+					break;
+				}
+				}
+			}
+			else {
+				uniform_int_distribution<> distr(1, 3);
+				short int destination = distr(gen);
+				switch (destination) {
+				case 1: { // top
+					x = x;
+					y -= 1;
+					break;
+				}
+				case 2: { // left
+					x -= 1;
+					y = y;
+					break;
+				}
+				case 3: { // right
+					x += 1;
+					y = y;
+					break;
+				}
+				}
+			}
+		}
+		else if (x == width && (y >= 2 && y < height)) {
+			uniform_int_distribution<> distr(1, 3);
+			short int destination = distr(gen);
+			switch (destination) {
+			case 1: { // down
+				y += 1;
+				break;
+			}
+			case 2: { // top
+				y -= 1;
+				break;
+			}
+			case 3: { // left
+				x -= 1;
+				break;
+			}
+			}
+		}
+		else if (x == 1 && (y >= 2 && y < height)) {
+			uniform_int_distribution<> distr(1, 3);
+			short int destination = distr(gen);
+			switch (destination) {
+			case 1: { // down
+				y += 1;
+				break;
+			}
+			case 2: { // top
+				y -= 1;
+				break;
+			}
+			case 3: { // right
+				x += 1;
+				break;
+			}
+			}
+		}
+		else {
+			uniform_int_distribution<> distr(1, 4);
+			short int destination = distr(gen);
+			switch (destination) {
+			case 1: { // down
+				y += 1;
+				break;
+			}
+			case 2: { // top
+				y -= 1;
+				break;
+			}
+			case 3: { // right
+				x += 1;
+				break;
+			}
+			case 4: { // left
+				x -= 1;
+				break;
+			}
+			}
+		}
+	}
+	else {
+		cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
+	}
+	cout << "" << x << ", " << y << "\n";
+
+}
+
+void Animal::collision(Organism* other) {
+	cout << other->getName() << endl;
 }
