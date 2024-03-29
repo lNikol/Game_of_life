@@ -1,4 +1,5 @@
 ﻿#include "Animal.h"
+#include "Plant.h"
 #include <iostream>
 using namespace std;
 Animal::Animal(const string& ikona, const string& name, const short& power, const short& initiative,
@@ -13,6 +14,7 @@ Animal::Animal(const string& ikona, const string& name, const short& power, cons
 World* Animal::getWorld() const {
 	return world;
 }
+
 std::string Animal::getName() const {
 	return name;
 };
@@ -52,7 +54,7 @@ void Animal::action() {
 	//world->animals
 	short int width = world->getWidth() - 2;
 	short int height = world->getHeight() - 2;
-	cout << "animal " << name << " (x,y): " << x << ", " << y << " -> ";
+	cout << "\nanimal " << name << " (x,y): " << x << ", " << y << " -> ";
 	if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
 		if (y == 1) {
 			if (x == 1) {
@@ -218,9 +220,21 @@ void Animal::action() {
 		cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
 	}
 	cout << "" << x << ", " << y << "\n";
-
+	collision(world->getOrganism(x, y));
 }
 
 void Animal::collision(Organism* other) {
-	cout << other->getName() << endl;
+	if (dynamic_cast<Animal*>(other)) {
+		cout << "Animal: " << other->getName();
+		cout << " my init and age: (" << initiative<<", "<<age << ") other init and age: (" 
+			<< other->getInitiative() << ", " << other->getAge() << ")" << endl;
+	}
+	else if (dynamic_cast<Plant*>(other)) {
+		cout << "Plant: " << other->getName();
+		cout << " my init and age: (" << initiative << ", " << age << ") other init and age: ("
+			<< other->getInitiative() << ", " << other->getAge() << ")" << endl;
+	}
+	else {
+		cout << "Inne lub brak \n";
+	}
 }

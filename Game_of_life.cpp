@@ -8,12 +8,13 @@
 using namespace std;
 int main()
 {
-	World gra(30, 30);
+	World gra(5, 5);
 
 	//delete world.wek[0][0];
 	//system("cls"); // czyszczenie konsoli
-	//for (int i = 0; i < 1000; i++) {
-//		gra.getOrganism(1, 1)->action();
-	//}
+	for (int i = 0; i < 10; i++) {
+		gra.takeATurn();
+		cout << "end turn\n\n\n\n\n\n";
+	}
 	cout << endl;
 }
