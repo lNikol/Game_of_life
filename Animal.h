@@ -6,6 +6,7 @@
 class Animal : public Organism {
 protected:
 	bool isMoved = false;
+	short oldX = -1, oldY = -1;
 public:
 	Animal(const std::string& ikona, const std::string& name, const short& power, const short& initiative,
 		const short& age, const short& x, const short& y, World* world);
@@ -25,5 +26,6 @@ public:
 	World* getWorld() const override;
 	std::pair<const short, const short> getPosition() const override;
 	void setPosition(const short& x, const short& y) override;
+	void deleteOrganism();
 	~Animal();
 };

@@ -1,8 +1,19 @@
 ﻿#include "World.h"
-#include "Animal.h"
-#include "Plant.h"
+#include "WilczeJagody.h"
+#include "Grass.h"
+#include "BarszczSosnowskiego.h"
+#include "Guarana.h"
+#include "Mlecz.h"
+#include "Antelope.h"
+#include "Fox.h"
+#include "Sheep.h"
+#include "Turtle.h"
+#include "Wolf.h"
 #include <iostream>
 using namespace std;
+
+//Przy uruchomieniu programu na planszy powinno się
+//pojawić po kilka sztuk wszystkich rodzajów zwierząt oraz roślin
 
 World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 	map.resize(width, vector<Cell*>(height));
@@ -31,12 +42,50 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}
 
 			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
-				if (j % 2 == 0) {
-					map[i][j]->org = new Plant("nic", "kwiat" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+				if (j % 4 == 1) {
+					switch ((i + j) % 4) {
+					case 0: {
+						map[i][j]->org = new Guarana("nic", "Guarana" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+						break;
+					}
+					case 1: {
+						map[i][j]->org = new WilczeJagody("nic", "Jagody" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+						break;
+					}
+					case 2: {
+						map[i][j]->org = new BarszczSosnowskiego("nic", "Barszcz" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+						break;
+					}
+					case 3: {
+						map[i][j]->org = new Grass("nic", "Guar" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+						break;
+					}
+					}
 					plants.push_back(map[i][j]->org); // robię vector wskaźników na rośliny
 				}
-				else {
-					map[i][j]->org = new Animal("nic", "animal" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+				else if (j % 4 == 0) {
+					switch ((i + j) % 5) {
+					case 0: {
+						map[i][j]->org = new Wolf("nic", "Wolf" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+						break;
+					}
+					case 1: {
+						map[i][j]->org = new Sheep("nic", "Sheep" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+						break;
+					}
+					case 2: {
+						map[i][j]->org = new Fox("nic", "Fox" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+						break;
+					}
+					case 3: {
+						map[i][j]->org = new Turtle("nic", "Turtle" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+						break;
+					}
+					case 4: {
+						map[i][j]->org = new Antelope("nic", "Antelope" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
+						break;
+					}
+					}
 					animals.push_back(map[i][j]->org); // robię vector wskaźników na zwierzęta
 				}
 			}
@@ -54,7 +103,7 @@ Organism* World::getOrganism(const short& x, const short& y) const {
 
 void World::deleteOrganism(Organism* org, const short& x, const short& y) {
 	map[y][x]->org = nullptr;
-	
+
 	for (int i = 0; i < animals.size(); i++) {
 		if (animals[i] == org) {
 			animals[i]->deleteOrganism();
@@ -78,7 +127,7 @@ short World::getHeight() const {
 }
 
 void World::takeATurn() {
-	
+
 	short int anSize = animals.size();
 	for (int i = 0; i < anSize; i++) {
 		dynamic_cast<Animal*>(animals[i])->setIsMoved(false);
@@ -97,14 +146,14 @@ void World::takeATurn() {
 			}
 		});
 
-	
+
 	short int plSize = plants.size();
 	for (int i = 0; i < plSize; i++) {
 		plants[i]->setAge(plants[i]->getAge() + 1);
 	}
 
-	for (auto* animal: animals) {
-		if (dynamic_cast<Animal*>(animal)!=nullptr) {
+	for (auto* animal : animals) {
+		if (dynamic_cast<Animal*>(animal) != nullptr) {
 			cout << "auto XY: " << animal->getX() << " " << animal->getY() << endl;
 			if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
 				animal->action();
@@ -118,5 +167,35 @@ void World::takeATurn() {
 		}
 		cout << "size in auto*: " << animals.size() << endl;
 	}
-	
+
+}
+
+
+void World::setOrganism(Organism* plant, const short& x, const short& y) {
+	if (getOrganism(x, y) == nullptr) {
+		Plant* cast = dynamic_cast<Plant*>(plant);
+		if (dynamic_cast<Grass*>(cast)) {
+			map[x][y]->org = new Grass("nic", "Nowa", 2, 3, 0, x, y, this);
+		}
+		else if (dynamic_cast<Guarana*>(cast)) {
+			map[x][y]->org = new Guarana("nic", "Guarana", 2, 3, 0, x, y, this);
+		}
+		else if (dynamic_cast<Mlecz*>(cast)) {
+			map[x][y]->org = new Mlecz("nic", "Mlecz", 2, 3, 0, x, y, this);
+		}
+		else if (dynamic_cast<WilczeJagody*>(cast)) {
+			map[x][y]->org = new WilczeJagody("nic", "WilczeJagody", 2, 3, 0, x, y, this);
+		}
+		else if (dynamic_cast<BarszczSosnowskiego*>(cast)) {
+			map[x][y]->org = new BarszczSosnowskiego("nic", "BarszczSosnowskiego", 2, 3, 0, x, y, this);
+		}
+		else {
+			cout << "\nbrak tego gotunku czy inny błąd\n";
+		}
+		plants.push_back(map[x][y]->org);
+
+	}
+	else {
+		cout << "The plant could not be added, the cell is occupied\n";
+	}
 }

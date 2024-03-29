@@ -7,12 +7,11 @@ class Organism {
 protected:
 	std::string name = "", ikona = "";
 	short power = -1, initiative = -1, age = -1;
-	short x = -1, y = -1, oldX = -1, oldY = -1;
+	short x = -1, y = -1;
 	World* world;
 public:
 	Organism(const std::string& ikona, const std::string& name, const short& power, const short& initiative,
-		const short& age, const short& x, const short& y, World* w) :
-		ikona(ikona), name(name), power(power), initiative(initiative), age(age), x(x), y(y), world(w) {};
+		const short& age, const short& x, const short& y, World* w);
 	virtual void action() = 0;
 	virtual void collision(Organism* org) = 0;
 	virtual void drawOrganism() const = 0;

@@ -4,11 +4,9 @@
 using namespace std;
 Animal::Animal(const string& ikona, const string& name, const short& power, const short& initiative,
 	const short& age, const short& x, const short& y, World* world) :
-	Organism(ikona, name, power, initiative, age, x, y, world) {
+	Organism(ikona, name, power, initiative, age, x, y, world), oldX(x), oldY(y) {
 	oldX = x;
 	oldY = y;
-	cout << "Animal (" << name << ", " << initiative << ", "
-		<< x << ", " << y << ") was created\n";
 }
 
 
@@ -143,7 +141,6 @@ void Animal::move() {
 				short int destination = distr(gen);
 				switch (destination) {
 				case 1: { // top
-					x = x;
 					y -= 1;
 					break;
 				}
@@ -159,18 +156,15 @@ void Animal::move() {
 				short int destination = distr(gen);
 				switch (destination) {
 				case 1: { // top
-					x = x;
 					y -= 1;
 					break;
 				}
 				case 2: { // left
 					x -= 1;
-					y = y;
 					break;
 				}
 				case 3: { // right
 					x += 1;
-					y = y;
 					break;
 				}
 				}
@@ -277,12 +271,25 @@ void Animal::collision(Organism* other) {
 		world->replaceOrganism(nullptr, oldX, oldY);
 
 		//dodac zmiane x y organizmu
+		//napisac od nowa ten sytsem z roslinami w zaleznosci od roslin
 	}
 	else {
 		world->replaceOrganism(this, x, y);
 		world->replaceOrganism(nullptr, oldX, oldY);
 	}
 }
+
+
+void Animal::deleteOrganism(){
+	power = -1;
+	initiative = -1;
+	age = -1;
+	x = -1;
+	y = -1;
+	oldX = -1;
+	oldY = -1;
+}
+
 
 Animal::~Animal() {
 	cout << "~Animal " << this << endl;

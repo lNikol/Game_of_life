@@ -1,5 +1,7 @@
 #pragma once
 #include "Organism.h"
+#include "Animal.h"
+#include "Plant.h"
 #include "Cell.h"
 #include <vector>
 
@@ -16,6 +18,7 @@ public:
 	void takeATurn();
 	void drawWorld();
 	Organism* getOrganism(const short& x, const short& y) const;
+	void setOrganism(Organism* plant, const short& x, const short& y);
 	short getWidth() const;
 	short getHeight() const;
 	void deleteOrganism(Organism* org, const short& x, const short& y);
