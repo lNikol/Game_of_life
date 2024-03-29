@@ -6,7 +6,8 @@ class World;
 class Organism {
 protected:
 	std::string name = "", ikona = "";
-	short power = -1, initiative = -1, age = -1, x = -1, y = -1;
+	short power = -1, initiative = -1, age = -1;
+	short x = -1, y = -1, oldX = -1, oldY = -1;
 	World* world;
 public:
 	Organism(const std::string& ikona, const std::string& name, const short& power, const short& initiative,
@@ -19,10 +20,13 @@ public:
 	virtual short getPower() const = 0;
 	virtual short getInitiative() const = 0;
 	virtual short getAge() const = 0;
+	virtual short getX() const = 0;
+	virtual short getY() const = 0;
 	virtual void setAge(const short&) = 0;
 	virtual World* getWorld() const = 0; // tutaj blad podczas build
 	virtual std::pair<const short, const short> getPosition() const = 0;
 	virtual void setPosition(const short& x, const short& y) = 0;
-	//virtual ~Organism();
+	virtual void deleteOrganism();
+	//virtual ~Organism() = 0;
 
 };

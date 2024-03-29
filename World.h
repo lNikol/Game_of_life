@@ -18,6 +18,7 @@ public:
 	Organism* getOrganism(const short& x, const short& y) const;
 	short getWidth() const;
 	short getHeight() const;
-	//World* getWorld() const;
+	void deleteOrganism(Organism* org, const short& x, const short& y);
+	void replaceOrganism(Organism* org, const short& x, const short& y);
 	//~World();
 };

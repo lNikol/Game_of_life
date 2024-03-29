@@ -8,11 +8,11 @@
 using namespace std;
 int main()
 {
-	World gra(5, 5);
+	World gra(3, 3);
 
 	//delete world.wek[0][0];
 	//system("cls"); // czyszczenie konsoli
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 300; i++) {
 		gra.takeATurn();
 		cout << "end turn\n\n\n\n\n\n";
 	}

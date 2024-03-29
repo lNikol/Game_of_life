@@ -8,16 +8,27 @@ Plant::Plant(const string& ikona, const string& name, const short& power, const 
 	cout << "Plant (" << name << ", " << initiative << ", "
 		<< x << ", " << y << ") was created\n";
 }
+
 void Plant::collision(Organism* other) {
+	cout << "Plant collision: ";
 	cout << other->getName() << endl;
 }
+
 World* Plant::getWorld() const {
 	return world;
 }
+
 std::string Plant::getName() const {
 	return name;
 };
 
+short Plant::getX() const {
+	return x;
+}
+
+short Plant::getY() const {
+	return y;
+}
 short Plant::getPower() const {
 	return power;
 }
@@ -47,4 +58,8 @@ void Plant::drawOrganism() const {
 
 void Plant::action() {
 	cout << "action in plant\n";
+}
+
+Plant::~Plant() {
+	cout << "~Plant......\n";
 }

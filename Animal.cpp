@@ -5,7 +5,8 @@ using namespace std;
 Animal::Animal(const string& ikona, const string& name, const short& power, const short& initiative,
 	const short& age, const short& x, const short& y, World* world) :
 	Organism(ikona, name, power, initiative, age, x, y, world) {
-
+	oldX = x;
+	oldY = y;
 	cout << "Animal (" << name << ", " << initiative << ", "
 		<< x << ", " << y << ") was created\n";
 }
@@ -27,6 +28,14 @@ short Animal::getInitiative() const {
 	return initiative;
 }
 
+short Animal::getX() const {
+	return x;
+}
+
+short Animal::getY() const {
+	return y;
+}
+
 short Animal::getAge() const {
 	return age;
 }
@@ -35,6 +44,14 @@ void Animal::setAge(const short& a) {
 	age = a;
 }
 
+
+bool Animal::getIsMoved() const {
+	return isMoved;
+}
+
+void Animal::setIsMoved(bool moved) {
+	isMoved = moved;
+}
 std::pair<const short, const short> Animal::getPosition() const {
 	return std::make_pair<const short&, const short&>(x, y);
 }
@@ -47,11 +64,13 @@ void Animal::drawOrganism() const {
 	cout << "Animal\n";
 }
 
-void Animal::action() {
+
+void Animal::move() {
 	random_device rd;
 	mt19937 gen(rd());
 
-	//world->animals
+	oldX = x;
+	oldY = y;
 	short int width = world->getWidth() - 2;
 	short int height = world->getHeight() - 2;
 	cout << "\nanimal " << name << " (x,y): " << x << ", " << y << " -> ";
@@ -220,21 +239,51 @@ void Animal::action() {
 		cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
 	}
 	cout << "" << x << ", " << y << "\n";
+}
+
+void Animal::action() {
+	isMoved = true;
+	move();
 	collision(world->getOrganism(x, y));
 }
 
 void Animal::collision(Organism* other) {
+	//dodac warunki jesli organism == nullptr
+
 	if (dynamic_cast<Animal*>(other)) {
-		cout << "Animal: " << other->getName();
-		cout << " my init and age: (" << initiative<<", "<<age << ") other init and age: (" 
-			<< other->getInitiative() << ", " << other->getAge() << ")" << endl;
+		short otherAge = other->getAge();
+		short otherInitiative = other->getInitiative();
+		short otherPower = other->getPower();
+		if (other == this) cout << "\n\nTO JA "<<other<<"\n\n";
+		if (power >= otherPower) {
+			cout << "I ("<<name<<", " << x << ", " << y << ") killed (" << other->getName() << ", "
+				<< other->getX() << ", " << other->getY() << ") end go to the position(" << x << ", " << y << ")\n";
+			world->deleteOrganism(other, other->getX(), other->getY());
+			world->deleteOrganism(nullptr, oldX, oldY);
+			world->replaceOrganism(this, x, y);
+
+		}
+		else {
+			cout << "I (" << name << ") was killed by (" << other->getName() << ") clear map by my position\n";
+			world->deleteOrganism(this, oldX, oldY);
+			//world->replaceOrganism(this, x, y);
+		}
 	}
 	else if (dynamic_cast<Plant*>(other)) {
 		cout << "Plant: " << other->getName();
 		cout << " my init and age: (" << initiative << ", " << age << ") other init and age: ("
 			<< other->getInitiative() << ", " << other->getAge() << ")" << endl;
+		world->replaceOrganism(this, x, y);
+		world->replaceOrganism(nullptr, oldX, oldY);
+
+		//dodac zmiane x y organizmu
 	}
 	else {
-		cout << "Inne lub brak \n";
+		world->replaceOrganism(this, x, y);
+		world->replaceOrganism(nullptr, oldX, oldY);
 	}
+}
+
+Animal::~Animal() {
+	cout << "~Animal " << this << endl;
 }
