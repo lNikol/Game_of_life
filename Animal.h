@@ -27,5 +27,8 @@ public:
 	std::pair<const short, const short> getPosition() const override;
 	void setPosition(const short& x, const short& y) override;
 	void deleteOrganism();
+	bool checkType(Animal* animal, Animal* other);
+	bool reproduction(Animal* other, const short& x, const short& y);
+	Organism* createAnimalWithType(Organism* animal, const short& x, const short& y);
 	~Animal();
 };

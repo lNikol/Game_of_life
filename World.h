@@ -19,6 +19,7 @@ public:
 	void drawWorld();
 	Organism* getOrganism(const short& x, const short& y) const;
 	void setOrganism(Organism* plant, const short& x, const short& y);
+	void addOrganism(Organism* org, const short& x, const short& y);
 	short getWidth() const;
 	short getHeight() const;
 	void deleteOrganism(Organism* org, const short& x, const short& y);

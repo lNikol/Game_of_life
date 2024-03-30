@@ -8,15 +8,13 @@
 using namespace std;
 int main()
 {
-	cout << "I recommend setting the map size to at least 10x10 to get all kinds of organisms\n";
+	cout << "\nI recommend setting the map size to at least 10x10 to get all kinds of organisms\n\n";
 
-	World gra(10, 10);
+	World gra(7, 7);
 
-	//delete world.wek[0][0];
-	//system("cls"); // czyszczenie konsoli
-	//for (int i = 0; i < 300; i++) {
-	//	gra.takeATurn();
-	//	cout << "end turn\n\n\n\n\n\n";
-	//}
+	for (int i = 0; i < 1000; i++) {
+		gra.takeATurn();
+		cout << "end turn\n\n\n\n\n\n";
+	}
 	cout << endl;
 }
