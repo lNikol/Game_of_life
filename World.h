@@ -11,6 +11,7 @@ protected:
 	std::vector<Organism*> plants;
 	std::vector < std::vector<Cell*>> map;
 	std::vector<Organism*> animals;
+	std::vector<Organism*> children;
 public:
 
 
@@ -22,7 +23,7 @@ public:
 	void addOrganism(Organism* org, const short& x, const short& y);
 	short getWidth() const;
 	short getHeight() const;
-	void deleteOrganism(Organism* org, const short& x, const short& y);
+	void deleteOrganism(Organism* org, short x, short y);
 	void replaceOrganism(Organism* org, const short& x, const short& y);
 	//~World();
 };

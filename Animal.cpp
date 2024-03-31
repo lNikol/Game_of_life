@@ -117,7 +117,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl; 
+					cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -133,7 +133,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl; 
+					cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -154,7 +154,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl; 
+					cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -172,7 +172,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl; 
+					cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -188,7 +188,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl; 
+					cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -209,7 +209,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl; 
+					cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -231,7 +231,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 				return true;
 			}
 			else {
-				cout << "There are no empty cells around " << name << endl; 
+				cout << "There are no empty cells around " << name << endl;
 				return false;
 			}
 		}
@@ -252,7 +252,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 				return true;
 			}
 			else {
-				cout << "There are no empty cells around " << name << endl; 
+				cout << "There are no empty cells around " << name << endl;
 				return false;
 			}
 		}
@@ -278,7 +278,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 				return true;
 			}
 			else {
-				cout << "There are no empty cells around " << name << endl; 
+				cout << "There are no empty cells around " << name << endl;
 				return false;
 			}
 		}
@@ -469,38 +469,48 @@ void Animal::collision(Organism* other) {
 	if (dynamic_cast<Animal*>(other)) {
 		if (checkType(this, dynamic_cast<Animal*>(other))) {
 			cout << "te same\n";
-			if (reproduction(this, x, y) == false) {
-				if (reproduction(dynamic_cast<Animal*>(other), other->getX(), other->getY() == false)) {
+			if (reproduction(this, oldX, oldY) == false) {
+				cout << "other XY: " << other->getX() << " " << other->getY() << endl;
+				if (reproduction(dynamic_cast<Animal*>(other), other->getX(), other->getY()) == false) {
 					cout << "Couldn't add a child\n";
 				}
 				else {
-					cout << "Child was added\n";
+					cout << "Child was added from second\n";
 				}
 			}
 			else {
-				cout << "Child was added\n";
+				cout << "Child was added from first\n";
 			}
+			x = oldX;
+			y = oldY;
 		}
 		else {
 			short otherAge = other->getAge();
 			short otherInitiative = other->getInitiative();
 			short otherPower = other->getPower();
-			if (other == this) cout << "\n\nTO JA " << other << "\n\n";
-			if (power >= otherPower) {
-				cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
-					<< other->getX() << ", " << other->getY() << ") end go to the position(" << x << ", " << y << ")\n";
-				world->deleteOrganism(other, other->getX(), other->getY());
-				world->deleteOrganism(nullptr, oldX, oldY);
+			if (otherPower == -1) {
 				world->replaceOrganism(this, x, y);
-
+				world->replaceOrganism(nullptr, oldX, oldY);
 			}
 			else {
-				cout << "I (" << name << ") was killed by (" << other->getName() << ") clear map by my position\n";
-				world->deleteOrganism(this, oldX, oldY);
-				//world->replaceOrganism(this, x, y);
+				if (other == this) cout << "\n\nTO JA " << other << "\n\n";
+				if (power >= otherPower) {
+					cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
+						<< other->getX() << ", " << other->getY() << ") end go to the position(" << x << ", " << y << ")\n";
+					world->deleteOrganism(other, other->getX(), other->getY());
+					world->deleteOrganism(nullptr, oldX, oldY);
+					world->replaceOrganism(this, x, y);
+
+				}
+				else {
+					cout << "I (" << name << ") was killed by (" << other->getName()
+						<< ", " << other->getX() << ", " << other->getY() << ") clear map by my position\n";
+					world->deleteOrganism(this, oldX, oldY);
+					//world->replaceOrganism(this, x, y);
+				}
 			}
 		}
-		
+
 	}
 	else if (dynamic_cast<Plant*>(other)) {
 		cout << "Plant: " << other->getName();

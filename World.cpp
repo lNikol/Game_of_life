@@ -101,16 +101,33 @@ Organism* World::getOrganism(const short& x, const short& y) const {
 	return map[y][x]->org;
 }
 
-void World::deleteOrganism(Organism* org, const short& x, const short& y) {
+void World::deleteOrganism(Organism* org, short x, short y) {
 	map[y][x]->org = nullptr;
 
-	for (int i = 0; i < animals.size(); i++) {
-		if (animals[i] == org) {
-			animals[i]->deleteOrganism();
-			animals.erase(animals.begin() + i);
-			break;
+	if (org != nullptr) {
+		bool isDeleted = false;
+		for (int i = 0; i < animals.size(); i++) {
+			if (animals[i] == org) {
+				animals[i]->deleteOrganism();
+				animals.erase(animals.begin() + i);
+				isDeleted = true;
+				break;
+			}
+		}
+		if (!isDeleted) {
+			short childrenSize = children.size();
+			for (int i = 0; i < childrenSize; i++) {
+				if (children[i] == org) {
+					children[i]->deleteOrganism();
+					children.erase(children.begin() + i);
+					break;
+				}
+			}
 		}
 	}
+	
+
+	
 }
 
 void World::replaceOrganism(Organism* org, const short& x, const short& y) {
@@ -127,7 +144,15 @@ short World::getHeight() const {
 
 void World::takeATurn() {
 
-	short int anSize = animals.size();
+	short childrenSize = children.size();
+	for (int i = 0; i < childrenSize; i++) {
+		if (children[i] != nullptr) {
+			animals.push_back(children[i]);
+		}
+	}
+	children.clear();
+
+	short anSize = animals.size();
 	for (int i = 0; i < anSize; i++) {
 		dynamic_cast<Animal*>(animals[i])->setIsMoved(false);
 		animals[i]->setAge(animals[i]->getAge() + 1);
@@ -154,8 +179,9 @@ void World::takeATurn() {
 	for (auto* animal : animals) {
 		cout << "auto size: " << animals.size() << endl;
 		k++;
-		cout << "Auto* animal: " << animal <<" "<< animal->getX()<<", "<< animal->getY() << endl;
-		cout <<"k: " << k << endl;
+		cout << "Auto* animal: " << animal;
+		cout << " " << animal->getX() << ", " << animal->getY() << endl;
+		cout << "k: " << k << endl;
 		if (dynamic_cast<Animal*>(animal) != nullptr) {
 			cout << "auto XY: " << animal->getX() << " " << animal->getY() << endl;
 			if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
@@ -163,7 +189,7 @@ void World::takeATurn() {
 			}
 			if (animal->getX() == -1) {
 				cout << "\n\n-------  " << animal->getName() << "  ------------------------------- MINUS JEDEN ---------------------------------------\n\n";
-				for (auto* an : animals) cout << an->getName() << " is " << an << " ";
+				//for (auto* an : animals) cout << an->getName() << " is " << an << " ";
 				cout << endl;
 				break;
 			}
@@ -173,11 +199,11 @@ void World::takeATurn() {
 }
 
 void World::addOrganism(Organism* org, const short& x, const short& y) {
-	cout << "addOrganism size before: " << animals.size() << endl;
+	cout << "addOrganism size before: " << children.size() << endl;
 	if (dynamic_cast<Animal*>(org)) {
 		map[y][x]->org = org;
-		animals.push_back(org);
-		cout <<"add organism: " << org << endl;
+		children.push_back(org);
+		cout << "add organism: " << org << endl;
 	}
 	else if (dynamic_cast<Plant*>(org)) {
 		map[y][x]->org = org;
@@ -186,7 +212,7 @@ void World::addOrganism(Organism* org, const short& x, const short& y) {
 	else if (org == nullptr) {
 		cout << "It is not possible to add an organism\n";
 	}
-	cout << "addOrganism size after: " << animals.size() << endl;
+	cout << "addOrganism size after: " << children.size() << endl;
 }
 
 void World::setOrganism(Organism* plant, const short& x, const short& y) {
