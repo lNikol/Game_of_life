@@ -282,7 +282,9 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 				return false;
 			}
 		}
+		return false;
 	}
+	return false;
 }
 
 
@@ -369,7 +371,6 @@ void Animal::move() {
 				}
 				case 2: { // left
 					x -= 1;
-					y = y;
 					break;
 				}
 				}
@@ -468,9 +469,7 @@ void Animal::collision(Organism* other) {
 	//dodac warunki jesli organism == nullptr
 	if (dynamic_cast<Animal*>(other)) {
 		if (checkType(this, dynamic_cast<Animal*>(other))) {
-			cout << "te same\n";
 			if (reproduction(this, oldX, oldY) == false) {
-				cout << "other XY: " << other->getX() << " " << other->getY() << endl;
 				if (reproduction(dynamic_cast<Animal*>(other), other->getX(), other->getY()) == false) {
 					cout << "Couldn't add a child\n";
 				}
@@ -500,7 +499,8 @@ void Animal::collision(Organism* other) {
 					world->deleteOrganism(other, other->getX(), other->getY());
 					world->deleteOrganism(nullptr, oldX, oldY);
 					world->replaceOrganism(this, x, y);
-
+					oldX = x;
+					oldY = y;
 				}
 				else {
 					cout << "I (" << name << ") was killed by (" << other->getName()
