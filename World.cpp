@@ -179,9 +179,9 @@ void World::takeATurn() {
 	for (auto* animal : animals) {
 		cout << "auto size: " << animals.size() << endl;
 		k++;
-		cout << "Auto* animal: " << animal;
-		cout << " " << animal->getX() << ", " << animal->getY() << endl;
-		cout << "k: " << k << endl;
+		//cout << "Auto* animal: " << animal;
+		//cout << " " << animal->getX() << ", " << animal->getY() << endl;
+		//cout << "k: " << k << endl;
 		if (dynamic_cast<Animal*>(animal) != nullptr) {
 			cout << "auto XY: " << animal->getX() << " " << animal->getY() << endl;
 			if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {

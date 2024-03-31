@@ -460,9 +460,15 @@ void Animal::move() {
 }
 
 void Animal::action() {
-	isMoved = true;
-	move();
-	collision(world->getOrganism(x, y));
+	if (!dynamic_cast<Fox*>(this)) {
+		isMoved = true;
+		move();
+		collision(world->getOrganism(x, y));
+	}
+	else {
+		dynamic_cast<Fox*>(this)->action();
+	}
+	
 }
 
 void Animal::collision(Organism* other) {
@@ -482,6 +488,7 @@ void Animal::collision(Organism* other) {
 			}
 			x = oldX;
 			y = oldY;
+			return;
 		}
 		else {
 			short otherAge = other->getAge();
@@ -492,7 +499,7 @@ void Animal::collision(Organism* other) {
 				world->replaceOrganism(nullptr, oldX, oldY);
 			}
 			else {
-				if (other == this) cout << "\n\nTO JA " << other << "\n\n";
+				//if (other == this) cout << "\n\nTO JA " << other << "\n\n";
 				if (power >= otherPower) {
 					cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
 						<< other->getX() << ", " << other->getY() << ") end go to the position(" << x << ", " << y << ")\n";
