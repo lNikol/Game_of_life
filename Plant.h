@@ -20,6 +20,6 @@ public:
 	void setAge(const short& a) override;
 	World* getWorld() const override;
 	std::pair<const short, const short> getPosition() const override;
-	void setPosition(const short& x, const short& y) override;
+	void setPosition(const short x, const short y) override;
 	~Plant();
 };

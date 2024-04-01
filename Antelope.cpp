@@ -3,6 +3,5 @@
 Antelope::Antelope(const std::string& ikona, const std::string& name, const short& power, const short& initiative,
 	const short& age, const short& x, const short& y, World* world) :
 	Animal(ikona, name, power, initiative, age, x, y, world) {
-	std::cout << "Antelope (" << name << ", " << initiative << ", "
-		<< x << ", " << y << ") was created\n";
+	std::cout << "Antelope (" << name << ", " << x << ", " << y << ") was created\n";
 }

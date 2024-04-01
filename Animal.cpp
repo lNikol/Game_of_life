@@ -31,7 +31,7 @@ Organism* Animal::createAnimalWithType(Organism* animal, const short& x, const s
 		return new Turtle("nic", "Turtle", 2, 1, 0, x, y, animal->getWorld());
 	}
 	else if (dynamic_cast<Wolf*>(cast)) {
-		return new Wolf("nic", "WolfChild", 9, 4, 0, x, y, animal->getWorld());
+		return new Wolf("nic", "Wolf", 9, 4, 0, x, y, animal->getWorld());
 	}
 	else {
 		cout << "\nThe absence of this type of animal or the organism is not an animal\n";
@@ -67,6 +67,14 @@ short Animal::getY() const {
 	return y;
 }
 
+short Animal::getOldX() const {
+	return oldX;
+}
+
+short Animal::getOldY() const {
+	return oldY;
+}
+
 short Animal::getAge() const {
 	return age;
 }
@@ -88,7 +96,7 @@ std::pair<const short, const short> Animal::getPosition() const {
 	return std::make_pair<const short&, const short&>(x, y);
 }
 
-void Animal::setPosition(const short& xx, const short& yy) {
+void Animal::setPosition(const short xx, const short yy) {
 	x = xx;
 	y = yy;
 }
@@ -460,15 +468,9 @@ void Animal::move() {
 }
 
 void Animal::action() {
-	if (!dynamic_cast<Fox*>(this)) {
-		isMoved = true;
-		move();
-		collision(world->getOrganism(x, y));
-	}
-	else {
-		dynamic_cast<Fox*>(this)->action();
-	}
-	
+	isMoved = true;
+	move();
+	collision(world->getOrganism(x, y));
 }
 
 void Animal::collision(Organism* other) {
@@ -491,7 +493,6 @@ void Animal::collision(Organism* other) {
 			return;
 		}
 		else {
-			short otherAge = other->getAge();
 			short otherInitiative = other->getInitiative();
 			short otherPower = other->getPower();
 			if (otherPower == -1) {
@@ -499,21 +500,24 @@ void Animal::collision(Organism* other) {
 				world->replaceOrganism(nullptr, oldX, oldY);
 			}
 			else {
-				//if (other == this) cout << "\n\nTO JA " << other << "\n\n";
-				if (power >= otherPower) {
-					cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
-						<< other->getX() << ", " << other->getY() << ") end go to the position(" << x << ", " << y << ")\n";
-					world->deleteOrganism(other, other->getX(), other->getY());
-					world->deleteOrganism(nullptr, oldX, oldY);
-					world->replaceOrganism(this, x, y);
-					oldX = x;
-					oldY = y;
+				if (dynamic_cast<Turtle*>(other)) {
+					other->collision(this);
 				}
 				else {
-					cout << "I (" << name << ") was killed by (" << other->getName()
-						<< ", " << other->getX() << ", " << other->getY() << ") clear map by my position\n";
-					world->deleteOrganism(this, oldX, oldY);
-					//world->replaceOrganism(this, x, y);
+					if (power >= otherPower) {
+						cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
+							<< other->getX() << ", " << other->getY() << ") end go to the position (" << x << ", " << y << ")\n";
+						world->deleteOrganism(other, other->getX(), other->getY());
+						world->deleteOrganism(nullptr, oldX, oldY);
+						world->replaceOrganism(this, x, y);
+						oldX = x;
+						oldY = y;
+					}
+					else {
+						cout << "I (" << name << ") was killed by (" << other->getName()
+							<< ", " << other->getX() << ", " << other->getY() << ") clear map by my old position\n";
+						world->deleteOrganism(this, oldX, oldY);
+					}
 				}
 			}
 		}
@@ -532,6 +536,8 @@ void Animal::collision(Organism* other) {
 	else {
 		world->replaceOrganism(this, x, y);
 		world->replaceOrganism(nullptr, oldX, oldY);
+		oldX = x;
+		oldY = y;
 	}
 }
 

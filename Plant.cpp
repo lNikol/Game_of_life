@@ -42,7 +42,7 @@ short Plant::getAge() const {
 void Plant::setAge(const short& a) {
 	age = a;
 }
-void Plant::setPosition(const short& xx, const short& yy) {
+void Plant::setPosition(const short xx, const short yy) {
 	x = xx;
 	y = yy;
 }

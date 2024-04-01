@@ -24,7 +24,7 @@ public:
 	virtual void setAge(const short&) = 0;
 	virtual World* getWorld() const = 0; // tutaj blad podczas build
 	virtual std::pair<const short, const short> getPosition() const = 0;
-	virtual void setPosition(const short& x, const short& y) = 0;
+	virtual void setPosition(const short x, const short y) = 0;
 	virtual void deleteOrganism();
 	//virtual ~Organism() = 0;
 

@@ -17,6 +17,8 @@ public:
 	std::string getName() const override;
 	short getX() const override;
 	short getY() const override;
+	short getOldX() const;
+	short getOldY() const;
 	short getPower() const override;
 	short getInitiative() const override;
 	short getAge() const override;
@@ -25,7 +27,7 @@ public:
 	void setAge(const short& a) override;
 	World* getWorld() const override;
 	std::pair<const short, const short> getPosition() const override;
-	void setPosition(const short& x, const short& y) override;
+	void setPosition(const short x, const short y) override;
 	void deleteOrganism();
 	bool checkType(Animal* animal, Animal* other);
 	bool reproduction(Animal* other, const short& x, const short& y);

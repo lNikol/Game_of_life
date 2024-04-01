@@ -124,10 +124,7 @@ void World::deleteOrganism(Organism* org, short x, short y) {
 				}
 			}
 		}
-	}
-	
-
-	
+	}	
 }
 
 void World::replaceOrganism(Organism* org, const short& x, const short& y) {
@@ -175,7 +172,9 @@ void World::takeATurn() {
 	for (int i = 0; i < plSize; i++) {
 		plants[i]->setAge(plants[i]->getAge() + 1);
 	}
+
 	int k = 0;
+
 	for (auto* animal : animals) {
 		cout << "auto size: " << animals.size() << endl;
 		k++;

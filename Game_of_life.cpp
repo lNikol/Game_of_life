@@ -10,7 +10,7 @@ int main()
 {
 	cout << "\nI recommend setting the map size to at least 10x10 to get all kinds of organisms\n\n";
 
-	World gra(8, 8);
+	World gra(10, 10);
 
 	for (int i = 0; i < 30; i++) {
 		gra.takeATurn();
