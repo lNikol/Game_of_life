@@ -503,20 +503,27 @@ void Animal::collision(Organism* other) {
 				if (dynamic_cast<Turtle*>(other)) {
 					other->collision(this);
 				}
+				else if (dynamic_cast<Antelope*>(other)) {
+					other->collision(this);
+					if (other->getX() == -1) {
+						world->replaceOrganism(this, x, y);
+						world->deleteOrganism(nullptr, oldX, oldY);
+					}
+				}
 				else {
 					if (power >= otherPower) {
 						cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
 							<< other->getX() << ", " << other->getY() << ") end go to the position (" << x << ", " << y << ")\n";
 						world->deleteOrganism(other, other->getX(), other->getY());
-						world->deleteOrganism(nullptr, oldX, oldY);
 						world->replaceOrganism(this, x, y);
 						oldX = x;
 						oldY = y;
 					}
 					else {
-						cout << "I (" << name << ") was killed by (" << other->getName()
+						cout << "I (" << name << ", " << x << ", " << y << ") was killed by (" << other->getName()
 							<< ", " << other->getX() << ", " << other->getY() << ") clear map by my old position\n";
 						world->deleteOrganism(this, oldX, oldY);
+						
 					}
 				}
 			}

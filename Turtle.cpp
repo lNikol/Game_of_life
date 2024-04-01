@@ -69,7 +69,7 @@ void Turtle::collision(Organism* org) {
 						oldY = y;
 					}
 					else {
-						cout << "I (" << name << ") was killed by (" << other->getName()
+						cout << "I (" << name << ", " << x << ", " << y << ") was killed by (" << other->getName()
 							<< ", " << other->getX() << ", " << other->getY() << ") clear map by my old position\n";
 						world->deleteOrganism(this, oldX, oldY);
 						other->setPosition(other->getOldX(), other->getOldY());

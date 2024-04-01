@@ -173,11 +173,11 @@ void World::takeATurn() {
 		plants[i]->setAge(plants[i]->getAge() + 1);
 	}
 
-	int k = 0;
+	//int k = 0;
 
 	for (auto* animal : animals) {
-		cout << "auto size: " << animals.size() << endl;
-		k++;
+		//cout << "auto size: " << animals.size() << endl;
+		//k++;
 		//cout << "Auto* animal: " << animal;
 		//cout << " " << animal->getX() << ", " << animal->getY() << endl;
 		//cout << "k: " << k << endl;
@@ -198,11 +198,11 @@ void World::takeATurn() {
 }
 
 void World::addOrganism(Organism* org, const short& x, const short& y) {
-	cout << "addOrganism size before: " << children.size() << endl;
+	//cout << "addOrganism size before: " << children.size() << endl;
 	if (dynamic_cast<Animal*>(org)) {
 		map[y][x]->org = org;
 		children.push_back(org);
-		cout << "add organism: " << org << endl;
+		//cout << "add organism: " << org << endl;
 	}
 	else if (dynamic_cast<Plant*>(org)) {
 		map[y][x]->org = org;
@@ -211,7 +211,7 @@ void World::addOrganism(Organism* org, const short& x, const short& y) {
 	else if (org == nullptr) {
 		cout << "It is not possible to add an organism\n";
 	}
-	cout << "addOrganism size after: " << children.size() << endl;
+	//cout << "addOrganism size after: " << children.size() << endl;
 }
 
 void World::setOrganism(Organism* plant, const short& x, const short& y) {
