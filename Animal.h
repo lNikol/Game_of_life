@@ -5,7 +5,6 @@
 
 class Animal : public Organism {
 protected:
-	bool isMoved = false;
 	short oldX = -1, oldY = -1;
 public:
 	Animal(const std::string& ikona, const std::string& name, const short& power, const short& initiative,
@@ -22,9 +21,10 @@ public:
 	short getPower() const override;
 	short getInitiative() const override;
 	short getAge() const override;
-	bool getIsMoved() const;
+	bool getIsMoved() const override;
 	void setIsMoved(bool moved);
 	void setAge(const short& a) override;
+	void setPower(const short& pow);
 	World* getWorld() const override;
 	std::pair<const short, const short> getPosition() const override;
 	void setPosition(const short x, const short y) override;

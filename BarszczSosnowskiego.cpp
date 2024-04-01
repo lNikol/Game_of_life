@@ -1,9 +1,39 @@
 #include "BarszczSosnowskiego.h"
-
-BarszczSosnowskiego::BarszczSosnowskiego(const std::string& ikona, const std::string& name, const short& power, const short& initiative,
+#include <vector>
+using namespace std;
+BarszczSosnowskiego::BarszczSosnowskiego(const string& ikona, const string& name, const short& power, const short& initiative,
 	const short& age, const short& x, const short& y, World* world) :
 	Plant(ikona, name, power, initiative, age, x, y, world) {
 
-	std::cout << "BarszczSosnowskiego (" << name << ", " << initiative << ", "
-		<< x << ", " << y << ") was created\n";
+	cout << "BarszczSosnowskiego (" << name << ", " << x << ", " << y << ") was created\n";
 }
+
+void BarszczSosnowskiego::collision(Organism* org) {
+	auto cost = dynamic_cast<Animal*>(org);
+	cout << "Animal " << "(" << cost->getName() << ", " << cost->getX() << ", " << cost->getY() << ")"
+		<< " ate me (" << name << ", " << x << ", " << y << ") and was killed by me\n";
+	cout << "cost->name() cost->getOldX(), cost->getOldY(): "
+		<< cost->getName() << " " << cost->getOldX() << " " << cost->getOldY() << endl;
+	world->deleteOrganism(cost, cost->getOldX(), cost->getOldY());
+	cout << "this, x, y: " << name << " " << x << " " << y << endl;
+	world->deleteOrganism(this, x, y);
+}
+
+void BarszczSosnowskiego::action() {
+	Plant::action();
+	cout << "\nAction in (" << name << ", " << x << ", " << y << ") I'm starting to kill my animal neighbors\n";
+
+	vector<Organism*> neighbors;
+	neighbors.push_back(world->getOrganism(x + 1, y));
+	neighbors.push_back(world->getOrganism(x - 1, y));
+	neighbors.push_back(world->getOrganism(x, y + 1));
+	neighbors.push_back(world->getOrganism(x, y - 1));
+	for (int i = 0; i < 4; i++) {
+		if (neighbors[i] != nullptr && dynamic_cast<Animal*>(neighbors[i])) {
+			cout << "\n" << name << ": Animal " << "(" << neighbors[i]->getName() << ", "
+				<< neighbors[i]->getX() << ", " << neighbors[i]->getY() << ") was killed by me\n";
+			world->deleteOrganism(neighbors[i], neighbors[i]->getX(), neighbors[i]->getY());
+		}
+	}
+	cout << "\n" << name << ": end\n";
+};

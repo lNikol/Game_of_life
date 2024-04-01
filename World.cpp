@@ -42,28 +42,32 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}
 
 			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
-				//if (j % 4 == 1) {
-				//	switch ((i + j) % 4) {
-				//	case 0: {
-				//		map[i][j]->org = new Guarana("nic", "Guarana" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
-				//		break;
-				//	}
-				//	case 1: {
-				//		map[i][j]->org = new WilczeJagody("nic", "Jagody" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
-				//		break;
-				//	}
-				//	case 2: {
-				//		map[i][j]->org = new BarszczSosnowskiego("nic", "Barszcz" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
-				//		break;
-				//	}
-				//	case 3: {
-				//		map[i][j]->org = new Grass("nic", "Guar" + to_string(j + i * 2), j * 2 + 1, i * 2 + 2, 0, j, i, this);
-				//		break;
-				//	}
-				//	}
-				//	plants.push_back(map[i][j]->org); // robię vector wskaźników na rośliny
-				//}
-				if (j % 4 == 0) {
+				if (j % 4 == 1) {
+					switch ((i + j) % 5) {
+					case 0: {
+						map[i][j]->org = new Guarana("nic", "Guarana" + to_string(j + i * 2), 0, 0, 0, j, i, this);
+						break;
+					}
+					case 1: {
+						map[i][j]->org = new WilczeJagody("nic", "Jagody" + to_string(j + i * 2), 99, 0, 0, j, i, this);
+						break;
+					}
+					case 2: {
+						map[i][j]->org = new BarszczSosnowskiego("nic", "Barszcz" + to_string(j + i * 2), 10, 0, 0, j, i, this);
+						break;
+					}
+					case 3: {
+						map[i][j]->org = new Grass("nic", "Grass" + to_string(j + i * 2), 0, 0, 0, j, i, this);
+						break;
+					}
+					case 4:{
+						map[i][j]->org = new Mlecz("nic", "Mlecz" + to_string(j + i * 2), 0, 0, 0, j, i, this);
+						break; 
+					}
+					}
+					plants.push_back(map[i][j]->org); // robię vector wskaźników na rośliny
+				}
+				else if (j % 4 == 0) {
 					switch ((i + j) % 5) {
 					case 0: {
 						map[i][j]->org = new Wolf("nic", "Wolf" + to_string(j + i * 2), 9, 5, 0, j, i, this);
@@ -98,33 +102,47 @@ void World::drawWorld() {
 }
 
 Organism* World::getOrganism(const short& x, const short& y) const {
-	return map[y][x]->org;
+	return this->map[y][x]->org;
 }
 
 void World::deleteOrganism(Organism* org, short x, short y) {
-	map[y][x]->org = nullptr;
 
 	if (org != nullptr) {
+		cout << "World::deleteOrganism: " << org->getName();
+		cout << " " << org->getX() << " " << org->getY() << endl;
+		this->map[y][x]->org = nullptr;
 		bool isDeleted = false;
-		for (int i = 0; i < animals.size(); i++) {
-			if (animals[i] == org) {
-				animals[i]->deleteOrganism();
-				animals.erase(animals.begin() + i);
-				isDeleted = true;
-				break;
+		if (dynamic_cast<Animal*>(org)) {
+			for (int i = 0; i < animals.size(); i++) {
+				if (animals[i] == org) {
+					animals[i]->deleteOrganism();
+					animals.erase(animals.begin() + i);
+					isDeleted = true;
+					return;
+				}
 			}
 		}
-		if (!isDeleted) {
+		else if (dynamic_cast<Plant*>(org)) {
+			for (int i = 0; i < plants.size(); i++) {
+				if (plants[i] == org) {
+					plants[i]->deleteOrganism();
+					plants.erase(plants.begin() + i);
+					isDeleted = true;
+					return;
+				}
+			}
+		}
+		else if (!isDeleted) {
 			short childrenSize = children.size();
 			for (int i = 0; i < childrenSize; i++) {
 				if (children[i] == org) {
 					children[i]->deleteOrganism();
 					children.erase(children.begin() + i);
-					break;
+					return;
 				}
 			}
 		}
-	}	
+	}
 }
 
 void World::replaceOrganism(Organism* org, const short& x, const short& y) {
@@ -140,11 +158,15 @@ short World::getHeight() const {
 }
 
 void World::takeATurn() {
-
 	short childrenSize = children.size();
 	for (int i = 0; i < childrenSize; i++) {
 		if (children[i] != nullptr) {
+		if (dynamic_cast<Animal*>(children[i])) {
 			animals.push_back(children[i]);
+		}
+		else if (dynamic_cast<Plant*>(children[i])) {
+			plants.push_back(children[i]);
+		}
 		}
 	}
 	children.clear();
@@ -188,13 +210,22 @@ void World::takeATurn() {
 			}
 			if (animal->getX() == -1) {
 				cout << "\n\n-------  " << animal->getName() << "  ------------------------------- MINUS JEDEN ---------------------------------------\n\n";
-				//for (auto* an : animals) cout << an->getName() << " is " << an << " ";
 				cout << endl;
 				break;
 			}
 		}
 	}
 
+	for (auto* plant : plants) {
+		if (!dynamic_cast<Plant*>(plant)->getIsMoved() && plant->getX() != -1) {
+			plant->action();
+		}
+		if (plant->getX() == -1) {
+			cout << "\n\n-------  " << plant->getName() << "  ------------------------------- MINUS KWIAT ---------------------------------------\n\n";
+			cout << endl;
+			break;
+		}
+	}
 }
 
 void World::addOrganism(Organism* org, const short& x, const short& y) {
@@ -206,7 +237,7 @@ void World::addOrganism(Organism* org, const short& x, const short& y) {
 	}
 	else if (dynamic_cast<Plant*>(org)) {
 		map[y][x]->org = org;
-		plants.push_back(org);
+		children.push_back(org);
 	}
 	else if (org == nullptr) {
 		cout << "It is not possible to add an organism\n";
@@ -218,25 +249,26 @@ void World::setOrganism(Organism* plant, const short& x, const short& y) {
 	if (getOrganism(x, y) == nullptr) {
 		Plant* cast = dynamic_cast<Plant*>(plant);
 		if (dynamic_cast<Grass*>(cast)) {
-			map[x][y]->org = new Grass("nic", "Nowa", 2, 3, 0, x, y, this);
+			map[y][x]->org = new Grass("nic", "Nowa", 0, 0, 0, x, y, this);
 		}
 		else if (dynamic_cast<Guarana*>(cast)) {
-			map[x][y]->org = new Guarana("nic", "Guarana", 2, 3, 0, x, y, this);
+			map[y][x]->org = new Guarana("nic", "Guarana", 0, 0, 0, x, y, this);
 		}
 		else if (dynamic_cast<Mlecz*>(cast)) {
-			map[x][y]->org = new Mlecz("nic", "Mlecz", 2, 3, 0, x, y, this);
+			map[y][x]->org = new Mlecz("nic", "Mlecz", 0, 0, 0, x, y, this);
 		}
 		else if (dynamic_cast<WilczeJagody*>(cast)) {
-			map[x][y]->org = new WilczeJagody("nic", "WilczeJagody", 2, 3, 0, x, y, this);
+			map[y][x]->org = new WilczeJagody("nic", "WilczeJagody", 99, 0, 0, x, y, this);
 		}
 		else if (dynamic_cast<BarszczSosnowskiego*>(cast)) {
-			map[x][y]->org = new BarszczSosnowskiego("nic", "BarszczSosnowskiego", 2, 3, 0, x, y, this);
+			map[y][x]->org = new BarszczSosnowskiego("nic", "BarszczSosnowskiego", 10, 0, 0, x, y, this);
 		}
 		else {
 			cout << "\nbrak tego gotunku czy inny błąd\n";
 		}
-		plants.push_back(map[x][y]->org);
-
+		if (map[y][x]->org != nullptr) {
+			children.push_back(map[y][x]->org);
+		}
 	}
 	else {
 		cout << "The plant could not be added, the cell is occupied\n";

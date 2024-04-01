@@ -7,11 +7,6 @@ Plant::Plant(const string& ikona, const string& name, const short& power, const 
 
 }
 
-void Plant::collision(Organism* other) {
-	cout << "Plant collision: ";
-	cout << other->getName() << endl;
-}
-
 World* Plant::getWorld() const {
 	return world;
 }
@@ -21,12 +16,13 @@ std::string Plant::getName() const {
 };
 
 short Plant::getX() const {
-	return x;
+	return this->x;
 }
 
 short Plant::getY() const {
-	return y;
+	return this->y;
 }
+
 short Plant::getPower() const {
 	return power;
 }
@@ -42,10 +38,22 @@ short Plant::getAge() const {
 void Plant::setAge(const short& a) {
 	age = a;
 }
+
 void Plant::setPosition(const short xx, const short yy) {
 	x = xx;
 	y = yy;
 }
+
+
+void Plant::setIsMoved(bool moved) {
+	isMoved = moved;
+}
+
+bool Plant::getIsMoved() const {
+	return isMoved;
+}
+
+
 std::pair<const short, const short> Plant::getPosition() const {
 	return std::make_pair<const short&, const short&>(x, y);
 }
@@ -54,47 +62,127 @@ void Plant::drawOrganism() const {
 	cout << "Plant:" << name << "\n";
 }
 
+void Plant::collision(Organism* other) {
+	auto cost = dynamic_cast<Animal*>(other);
+	cout << "\nAnimal " << "(" << cost->getName() << ", " << cost->getX() << ", " << cost->getY() << ")"
+		<< " ate me (" << name << ", " << x << ", " << y << ") and nothing happend\n";
+	world->deleteOrganism(this, x, y);
+	world->replaceOrganism(cost, cost->getX(), cost->getY());
+	world->replaceOrganism(nullptr, cost->getOldX(), cost->getOldY());
+}
+
 void Plant::action() {
-	cout << "action in plant\n";
+	isMoved = true;
+	cout << "\nAction in plant (" << name << ", " << x << ", " << y << ")\n";
 
 	random_device rd;
 	mt19937 gen(rd());
-	short int width = world->getWidth() - 2;
-	short int height = world->getHeight() - 2;
-	short int newX = x;
-	short int newY = y;
-	cout << "\nPlant roprzestrzanie" << name << " (x,y): " << x << ", " << y << endl;
-	if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
-		if (y == 1) {
-			if (x == 1) {
-				uniform_int_distribution<> distr(1, 2);
-				short int destination = distr(gen);
-				switch (destination) {
-				case 1: { // down
-					newY += 1;
-					break;
+	uniform_int_distribution<> dist(1, 10);
+	short dest = dist(gen);
+	if (dest <= 4) {
+		short width = world->getWidth() - 2;
+		short height = world->getHeight() - 2;
+		short newX = x;
+		short newY = y;
+		cout << name << " roprzestrzanie " << name << " (x, y) : " << x << ", " << y << endl;
+		if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
+			if (y == 1) {
+				if (x == 1) {
+					uniform_int_distribution<> distr(1, 2);
+					short int destination = distr(gen);
+					switch (destination) {
+					case 1: { // down
+						newY += 1;
+						break;
+					}
+					case 2: { // right
+						newX += 1;
+						break;
+					}
+					}
 				}
-				case 2: { // right
-					newX += 1;
-					break;
+				else if (x == width) {
+					uniform_int_distribution<> distr(1, 2);
+					short int destination = distr(gen);
+					switch (destination) {
+					case 1: { // down
+						newY += 1;
+						break;
+					}
+					case 2: { // left
+						newX -= 1;
+						break;
+					}
+					}
 				}
+				else {
+					uniform_int_distribution<> distr(1, 3);
+					short int destination = distr(gen);
+					switch (destination) {
+					case 1: { // down
+						newY += 1;
+						break;
+					}
+					case 2: { // right
+						newX += 1;
+						break;
+					}
+					case 3: { // left
+						newX -= 1;
+						break;
+					}
+					}
 				}
 			}
-			else if (x == width) {
-				uniform_int_distribution<> distr(1, 2);
-				short int destination = distr(gen);
-				switch (destination) {
-				case 1: { // down
-					newY += 1;
-					break;
+			else if (y == height) {
+				if (x == 1) {
+					uniform_int_distribution<> distr(1, 2);
+					short int destination = distr(gen);
+					switch (destination) {
+					case 1: { // top
+						newY -= 1;
+						break;
+					}
+					case 2: { // right
+						newX += 1;
+						break;
+					}
+					}
 				}
-				case 2: { // left
-					newX -= 1;
-					break;
+				else if (x == width) {
+					uniform_int_distribution<> distr(1, 2);
+					short int destination = distr(gen);
+					switch (destination) {
+					case 1: { // top
+						newY -= 1;
+						break;
+					}
+					case 2: { // left
+						newX -= 1;
+						break;
+					}
+					}
 				}
+				else {
+					uniform_int_distribution<> distr(1, 3);
+					short int destination = distr(gen);
+					switch (destination) {
+					case 1: { // top
+						newY -= 1;
+						break;
+					}
+					case 2: { // left
+						newX -= 1;
+						break;
+					}
+					case 3: { // right
+						newX += 1;
+						break;
+					}
+					}
 				}
 			}
-			else {
+			else if (x == width && (y >= 2 && y < height)) {
 				uniform_int_distribution<> distr(1, 3);
 				short int destination = distr(gen);
 				switch (destination) {
@@ -102,8 +190,8 @@ void Plant::action() {
 					newY += 1;
 					break;
 				}
-				case 2: { // right
-					newX += 1;
+				case 2: { // top
+					newY -= 1;
 					break;
 				}
 				case 3: { // left
@@ -112,46 +200,16 @@ void Plant::action() {
 				}
 				}
 			}
-		}
-		else if (y == height) {
-			if (x == 1) {
-				uniform_int_distribution<> distr(1, 2);
-				short int destination = distr(gen);
-				switch (destination) {
-				case 1: { // top
-					newY -= 1;
-					break;
-				}
-				case 2: { // right
-					newX += 1;
-					break;
-				}
-				}
-			}
-			else if (x == width) {
-				uniform_int_distribution<> distr(1, 2);
-				short int destination = distr(gen);
-				switch (destination) {
-				case 1: { // top
-					newY -= 1;
-					break;
-				}
-				case 2: { // left
-					newX -= 1;
-					break;
-				}
-				}
-			}
-			else {
+			else if (x == 1 && (y >= 2 && y < height)) {
 				uniform_int_distribution<> distr(1, 3);
 				short int destination = distr(gen);
 				switch (destination) {
-				case 1: { // top
-					newY -= 1;
+				case 1: { // down
+					newY += 1;
 					break;
 				}
-				case 2: { // left
-					newX -= 1;
+				case 2: { // top
+					newY -= 1;
 					break;
 				}
 				case 3: { // right
@@ -160,71 +218,41 @@ void Plant::action() {
 				}
 				}
 			}
-		}
-		else if (x == width && (y >= 2 && y < height)) {
-			uniform_int_distribution<> distr(1, 3);
-			short int destination = distr(gen);
-			switch (destination) {
-			case 1: { // down
-				newY += 1;
-				break;
-			}
-			case 2: { // top
-				newY -= 1;
-				break;
-			}
-			case 3: { // left
-				newX -= 1;
-				break;
-			}
-			}
-		}
-		else if (x == 1 && (y >= 2 && y < height)) {
-			uniform_int_distribution<> distr(1, 3);
-			short int destination = distr(gen);
-			switch (destination) {
-			case 1: { // down
-				newY += 1;
-				break;
-			}
-			case 2: { // top
-				newY -= 1;
-				break;
-			}
-			case 3: { // right
-				newX += 1;
-				break;
-			}
+			else {
+				uniform_int_distribution<> distr(1, 4);
+				short int destination = distr(gen);
+				switch (destination) {
+				case 1: { // down
+					newY += 1;
+					break;
+				}
+				case 2: { // top
+					newY -= 1;
+					break;
+				}
+				case 3: { // right
+					newX += 1;
+					break;
+				}
+				case 4: { // left
+					newX -= 1;
+					break;
+				}
+				}
 			}
 		}
 		else {
-			uniform_int_distribution<> distr(1, 4);
-			short int destination = distr(gen);
-			switch (destination) {
-			case 1: { // down
-				newY += 1;
-				break;
-			}
-			case 2: { // top
-				newY -= 1;
-				break;
-			}
-			case 3: { // right
-				newX += 1;
-				break;
-			}
-			case 4: { // left
-				newX -= 1;
-				break;
-			}
-			}
+			cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
 		}
+		cout << "new x,y: " << newX << ", " << newY << "\n";
+		world->setOrganism(this, newX, newY);
 	}
 	else {
-		cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
+		cout << "Action in (" << name << ", " << x << ", " << y << ") nothing happend\n";
 	}
-	cout << "new x,y: " << newX << ", " << newX << "\n";
-	world->setOrganism(this, newX, newY);
+
+
+	
 }
 
 Plant::~Plant() {

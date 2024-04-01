@@ -12,7 +12,7 @@ int main()
 
 	World gra(10, 10);
 
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 30; i++) {
 		gra.takeATurn();
 		cout << i << " end turn\n\n\n\n\n\n";
 	}

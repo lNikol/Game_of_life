@@ -12,8 +12,6 @@ using namespace std;
 Animal::Animal(const string& ikona, const string& name, const short& power, const short& initiative,
 	const short& age, const short& x, const short& y, World* world) :
 	Organism(ikona, name, power, initiative, age, x, y, world), oldX(x), oldY(y) {
-	oldX = x;
-	oldY = y;
 }
 
 Organism* Animal::createAnimalWithType(Organism* animal, const short& x, const short& y) {
@@ -60,11 +58,11 @@ short Animal::getInitiative() const {
 }
 
 short Animal::getX() const {
-	return x;
+	return this->x;
 }
 
 short Animal::getY() const {
-	return y;
+	return this->y;
 }
 
 short Animal::getOldX() const {
@@ -83,6 +81,9 @@ void Animal::setAge(const short& a) {
 	age = a;
 }
 
+void Animal::setPower(const short& pow) {
+	power = pow;
+}
 
 bool Animal::getIsMoved() const {
 	return isMoved;
@@ -295,7 +296,6 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 	return false;
 }
 
-
 void Animal::move() {
 	random_device rd;
 	mt19937 gen(rd());
@@ -474,6 +474,7 @@ void Animal::action() {
 }
 
 void Animal::collision(Organism* other) {
+if(other!=nullptr) cout << "animal::collision: " << other->getName() << " " << other->getX() << " " << other->getY() << endl;
 	//dodac warunki jesli organism == nullptr
 	if (dynamic_cast<Animal*>(other)) {
 		if (checkType(this, dynamic_cast<Animal*>(other))) {
@@ -493,8 +494,8 @@ void Animal::collision(Organism* other) {
 			return;
 		}
 		else {
-			short otherInitiative = other->getInitiative();
 			short otherPower = other->getPower();
+			cout << "otherPower: " << otherPower << " " << other->getX() << " " << other->getY() << endl;
 			if (otherPower == -1) {
 				world->replaceOrganism(this, x, y);
 				world->replaceOrganism(nullptr, oldX, oldY);
@@ -523,22 +524,17 @@ void Animal::collision(Organism* other) {
 						cout << "I (" << name << ", " << x << ", " << y << ") was killed by (" << other->getName()
 							<< ", " << other->getX() << ", " << other->getY() << ") clear map by my old position\n";
 						world->deleteOrganism(this, oldX, oldY);
-						
 					}
 				}
 			}
 		}
-
 	}
 	else if (dynamic_cast<Plant*>(other)) {
-		cout << "Plant: " << other->getName();
-		cout << " my init and age: (" << initiative << ", " << age << ") other init and age: ("
-			<< other->getInitiative() << ", " << other->getAge() << ")" << endl;
-		world->replaceOrganism(this, x, y);
-		world->replaceOrganism(nullptr, oldX, oldY);
-
-		//dodac zmiane x y organizmu
-		//napisac od nowa ten sytsem z roslinami w zaleznosci od roslin
+		other->collision(this);
+		if (x != -1) {
+			oldX = x;
+			oldY = y;
+		}
 	}
 	else {
 		world->replaceOrganism(this, x, y);

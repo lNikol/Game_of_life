@@ -19,6 +19,8 @@ public:
 	short getY() const override;
 	void setAge(const short& a) override;
 	World* getWorld() const override;
+	bool getIsMoved() const override;
+	void setIsMoved(bool moved);
 	std::pair<const short, const short> getPosition() const override;
 	void setPosition(const short x, const short y) override;
 	~Plant();
