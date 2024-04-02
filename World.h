@@ -25,5 +25,6 @@ public:
 	short getHeight() const;
 	void deleteOrganism(Organism* org, short x, short y);
 	void replaceOrganism(Organism* org, const short& x, const short& y);
+	std::pair<short, short> randomPos();
 	//~World();
 };

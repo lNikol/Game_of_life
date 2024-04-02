@@ -22,7 +22,8 @@ void BarszczSosnowskiego::collision(Organism* org) {
 void BarszczSosnowskiego::action() {
 	Plant::action();
 	cout << "\nAction in (" << name << ", " << x << ", " << y << ") I'm starting to kill my animal neighbors\n";
-
+	short width = world->getWidth() - 2;
+	short height = world->getHeight() - 2;
 	vector<Organism*> neighbors;
 	neighbors.push_back(world->getOrganism(x + 1, y));
 	neighbors.push_back(world->getOrganism(x - 1, y));

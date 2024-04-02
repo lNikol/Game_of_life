@@ -15,8 +15,8 @@ using namespace std;
 //Przy uruchomieniu programu na planszy powinno się
 //pojawić po kilka sztuk wszystkich rodzajów zwierząt oraz roślin
 
-World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
-	map.resize(width, vector<Cell*>(height));
+World::World(const short& w, const short& h) :height(h + 2), width(w + 2) {
+	map.resize(height, vector<Cell*>(width));
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			map[i][j] = new Cell;
@@ -39,58 +39,63 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}
 			else if (j == 0 && i == height - 1) {
 				map[i][j]->symbol = char(192);
-			}
-
+			}			
+		}
+	}
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
 			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
 				if (j % 4 == 1) {
+					std::pair<short, short> randPos = randomPos();
 					switch ((i + j) % 5) {
 					case 0: {
-						map[i][j]->org = new Guarana("nic", "Guarana" + to_string(j + i * 2), 0, 0, 0, j, i, this);
+						map[randPos.second][randPos.first]->org = new Guarana("nic", "Guarana" + to_string(j + i * 2), 0, 0, 0, randPos.first, randPos.second, this);
 						break;
 					}
 					case 1: {
-						map[i][j]->org = new WilczeJagody("nic", "Jagody" + to_string(j + i * 2), 99, 0, 0, j, i, this);
+						map[randPos.second][randPos.first]->org = new WilczeJagody("nic", "Jagody" + to_string(j + i * 2), 99, 0, 0, randPos.first, randPos.second, this);
 						break;
 					}
 					case 2: {
-						map[i][j]->org = new BarszczSosnowskiego("nic", "Barszcz" + to_string(j + i * 2), 10, 0, 0, j, i, this);
+						map[randPos.second][randPos.first]->org = new BarszczSosnowskiego("nic", "Barszcz" + to_string(j + i * 2), 10, 0, 0, randPos.first, randPos.second, this);
 						break;
 					}
 					case 3: {
-						map[i][j]->org = new Grass("nic", "Grass" + to_string(j + i * 2), 0, 0, 0, j, i, this);
-						break;
-					}
-					case 4:{
-						map[i][j]->org = new Mlecz("nic", "Mlecz" + to_string(j + i * 2), 0, 0, 0, j, i, this);
-						break; 
-					}
-					}
-					plants.push_back(map[i][j]->org); // robię vector wskaźników na rośliny
-				}
-				else if (j % 4 == 0) {
-					switch ((i + j) % 5) {
-					case 0: {
-						map[i][j]->org = new Wolf("nic", "Wolf" + to_string(j + i * 2), 9, 5, 0, j, i, this);
-						break;
-					}
-					case 1: {
-						map[i][j]->org = new Sheep("nic", "Sheep" + to_string(j + i * 2), 4, 4, 0, j, i, this);
-						break;
-					}
-					case 2: {
-						map[i][j]->org = new Fox("nic", "Fox" + to_string(j + i * 2), 3, 7, 0, j, i, this);
-						break;
-					}
-					case 3: {
-						map[i][j]->org = new Turtle("nic", "Turtle" + to_string(j + i * 2), 2, 1, 0, j, i, this);
+						map[randPos.second][randPos.first]->org = new Grass("nic", "Grass" + to_string(j + i * 2), 0, 0, 0, randPos.first, randPos.second, this);
 						break;
 					}
 					case 4: {
-						map[i][j]->org = new Antelope("nic", "Antelope" + to_string(j + i * 2), 4, 4, 0, j, i, this);
+						map[randPos.second][randPos.first]->org = new Mlecz("nic", "Mlecz" + to_string(j + i * 2), 0, 0, 0, randPos.first, randPos.second, this);
 						break;
 					}
 					}
-					animals.push_back(map[i][j]->org); // robię vector wskaźników na zwierzęta
+					plants.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na rośliny
+				}
+				else if (j % 4 == 0) {
+					std::pair<short, short> randPos = randomPos();
+					switch ((i + j) % 5) {
+					case 0: {
+						map[randPos.second][randPos.first]->org = new Wolf("nic", "Wolf" + to_string(j + i * 2), 9, 5, 0, randPos.first, randPos.second, this);
+						break;
+					}
+					case 1: {
+						map[randPos.second][randPos.first]->org = new Sheep("nic", "Sheep" + to_string(j + i * 2), 4, 4, 0, randPos.first, randPos.second, this);
+						break;
+					}
+					case 2: {
+						map[randPos.second][randPos.first]->org = new Fox("nic", "Fox" + to_string(j + i * 2), 3, 7, 0, randPos.first, randPos.second, this);
+						break;
+					}
+					case 3: {
+						map[randPos.second][randPos.first]->org = new Turtle("nic", "Turtle" + to_string(j + i * 2), 2, 1, 0, randPos.first, randPos.second, this);
+						break;
+					}
+					case 4: {
+						map[randPos.second][randPos.first]->org = new Antelope("nic", "Antelope" + to_string(j + i * 2), 4, 4, 0, randPos.first, randPos.second, this);
+						break;
+					}
+					}
+					animals.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na zwierzęta
 				}
 			}
 		}
@@ -99,6 +104,19 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 
 void World::drawWorld() {
 	cout << "Author: Nikolai Lavrinov 201302\n";
+}
+
+
+std::pair<short, short> World::randomPos() {
+	short h = height - 2;
+	short w = width - 2;
+	short x = rand() % w + 1;
+	short y = rand() % h + 1;
+	while (getOrganism(x, y) != nullptr) {
+		x = rand() % w + 1;
+		y = rand() % h + 1;
+	}
+	return std::make_pair<short&, short&>(x, y);
 }
 
 Organism* World::getOrganism(const short& x, const short& y) const {

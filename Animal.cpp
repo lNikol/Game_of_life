@@ -502,6 +502,12 @@ if(other!=nullptr) cout << "animal::collision: " << other->getName() << " " << o
 			}
 			else {
 				if (dynamic_cast<Turtle*>(other)) {
+					//	Zapytać:
+					// Przykładowo błędem będzie zaimplementowanie w metodzie kolizja() klasy Zwierze
+					// sprawdzania czy organizm z którym zderzył się organizm atakujący jest klasy Zolw, a
+					// następnie porównywanie siły i pozostawanie na tym samym polu jeśli jest to konieczne.
+
+
 					other->collision(this);
 				}
 				else if (dynamic_cast<Antelope*>(other)) {
