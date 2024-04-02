@@ -1,9 +1,8 @@
 #include "BarszczSosnowskiego.h"
 #include <vector>
 using namespace std;
-BarszczSosnowskiego::BarszczSosnowskiego(const string& ikona, const string& name, const short& power, const short& initiative,
-	const short& age, const short& x, const short& y, World* world) :
-	Plant(ikona, name, power, initiative, age, x, y, world) {
+BarszczSosnowskiego::BarszczSosnowskiego(const short& x, const short& y, World* world) :
+	Plant("B", "Barszcz", 10, 0, 0, x, y, world) {
 
 	cout << "BarszczSosnowskiego (" << name << ", " << x << ", " << y << ") was created\n";
 }

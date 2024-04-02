@@ -12,9 +12,8 @@ protected:
 	std::vector < std::vector<Cell*>> map;
 	std::vector<Organism*> animals;
 	std::vector<Organism*> children;
+	std::string w_string;
 public:
-
-
 	World(const short& w, const short& h);
 	void takeATurn();
 	void drawWorld();
@@ -26,5 +25,6 @@ public:
 	void deleteOrganism(Organism* org, short x, short y);
 	void replaceOrganism(Organism* org, const short& x, const short& y);
 	std::pair<short, short> randomPos();
+	std::string worldToString();
 	//~World();
 };

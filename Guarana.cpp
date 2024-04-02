@@ -1,8 +1,7 @@
 #include "Guarana.h"
 using namespace std;
-Guarana::Guarana(const string& ikona, const string& name, const short& power, const short& initiative,
-	const short& age, const short& x, const short& y, World* world) :
-	Plant(ikona, name, power, initiative, age, x, y, world) {
+Guarana::Guarana(const short& x, const short& y, World* world) :
+	Plant("G", "Guarana", 0, 0, 0, x, y, world) {
 
 	cout << "Guarana (" << name << ", " << x << ", " << y << ") was created\n";
 }

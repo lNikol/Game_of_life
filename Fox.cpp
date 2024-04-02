@@ -1,8 +1,7 @@
 ﻿#include "Fox.h"
 using namespace std;
-Fox::Fox(const std::string& ikona, const std::string& name, const short& power, const short& initiative,
-	const short& age, const short& x, const short& y, World* world) :
-	Animal(ikona, name, power, initiative, age, x, y, world) {
+Fox::Fox(const short& x, const short& y, World* world) :
+	Animal("F", "Fox", 3, 7, 0, x, y, world) {
 	std::cout << "Fox (" << name << ", " << x << ", " << y << ") was created\n";
 }
 

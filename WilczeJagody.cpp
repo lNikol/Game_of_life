@@ -1,9 +1,8 @@
 #include "WilczeJagody.h"
 using namespace std;
 
-WilczeJagody::WilczeJagody(const string& ikona, const string& name, const short& power, const short& initiative,
-	const short& age, const short& x, const short& y, World* world) ://, World* world
-	Plant(ikona, name, power, initiative, age, x, y, world) {//, world
+WilczeJagody::WilczeJagody(const short& x, const short& y, World* world) ://, World* world
+	Plant("J", "Jagody", 99, 0, 0, x, y, world) {//, world
 
 	cout << "WilczeJagody (" << name << ", " << x << ", " << y << ") was created\n";
 }

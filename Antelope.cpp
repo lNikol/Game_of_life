@@ -1,8 +1,7 @@
 ﻿#include "Antelope.h"
 using namespace std;
-Antelope::Antelope(const string& ikona, const string& name, const short& power, const short& initiative,
-	const short& age, const short& x, const short& y, World* world) :
-	Animal(ikona, name, power, initiative, age, x, y, world) {
+Antelope::Antelope(const short& x, const short& y, World* world) :
+	Animal("A", "Antelope", 4, 4, 0, x, y, world) {
 	cout << "Antelope (" << name << ", " << x << ", " << y << ") was created\n";
 }
 

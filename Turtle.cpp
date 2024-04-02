@@ -1,8 +1,7 @@
 #include "Turtle.h"
 using namespace std;
-Turtle::Turtle(const string& ikona, const string& name, const short& power, const short& initiative,
-	const short& age, const short& x, const short& y, World* world) :
-	Animal(ikona, name, power, initiative, age, x, y, world) {
+Turtle::Turtle(const short& x, const short& y, World* world) :
+	Animal("T", "Turtle", 2, 1, 0, x, y, world) {
 	cout << "Turtle (" << name << ", " << x << ", " << y << ") was created\n";
 }
 

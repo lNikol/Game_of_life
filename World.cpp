@@ -15,7 +15,7 @@ using namespace std;
 //Przy uruchomieniu programu na planszy powinno się
 //pojawić po kilka sztuk wszystkich rodzajów zwierząt oraz roślin
 
-World::World(const short& w, const short& h) :height(h + 2), width(w + 2) {
+World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 	map.resize(height, vector<Cell*>(width));
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
@@ -29,16 +29,16 @@ World::World(const short& w, const short& h) :height(h + 2), width(w + 2) {
 				map[i][j]->symbol = "|";
 			}
 			if (i == 0 && j == 0) {
-				map[i][j]->symbol = char(218); // naprawic nie dziala char symbol
+				map[i][j]->symbol = "┌"; // naprawic nie dziala char symbol
 			}
 			if (i == height - 1 && j == width - 1) {
-				map[i][j]->symbol = char(217);
+				map[i][j]->symbol = "┘";
 			}
 			if (j == width - 1 && i == 0) {
-				map[i][j]->symbol = char(191);
+				map[i][j]->symbol = "┐";
 			}
 			else if (j == 0 && i == height - 1) {
-				map[i][j]->symbol = char(192);
+				map[i][j]->symbol = "└";
 			}			
 		}
 	}
@@ -49,23 +49,23 @@ World::World(const short& w, const short& h) :height(h + 2), width(w + 2) {
 					std::pair<short, short> randPos = randomPos();
 					switch ((i + j) % 5) {
 					case 0: {
-						map[randPos.second][randPos.first]->org = new Guarana("nic", "Guarana" + to_string(j + i * 2), 0, 0, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new Guarana(randPos.first, randPos.second, this);
 						break;
 					}
 					case 1: {
-						map[randPos.second][randPos.first]->org = new WilczeJagody("nic", "Jagody" + to_string(j + i * 2), 99, 0, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new WilczeJagody(randPos.first, randPos.second, this);
 						break;
 					}
 					case 2: {
-						map[randPos.second][randPos.first]->org = new BarszczSosnowskiego("nic", "Barszcz" + to_string(j + i * 2), 10, 0, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new BarszczSosnowskiego(randPos.first, randPos.second, this);
 						break;
 					}
 					case 3: {
-						map[randPos.second][randPos.first]->org = new Grass("nic", "Grass" + to_string(j + i * 2), 0, 0, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new Grass(randPos.first, randPos.second, this);
 						break;
 					}
 					case 4: {
-						map[randPos.second][randPos.first]->org = new Mlecz("nic", "Mlecz" + to_string(j + i * 2), 0, 0, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new Mlecz(randPos.first, randPos.second, this);
 						break;
 					}
 					}
@@ -75,23 +75,23 @@ World::World(const short& w, const short& h) :height(h + 2), width(w + 2) {
 					std::pair<short, short> randPos = randomPos();
 					switch ((i + j) % 5) {
 					case 0: {
-						map[randPos.second][randPos.first]->org = new Wolf("nic", "Wolf" + to_string(j + i * 2), 9, 5, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new Wolf(randPos.first, randPos.second, this);
 						break;
 					}
 					case 1: {
-						map[randPos.second][randPos.first]->org = new Sheep("nic", "Sheep" + to_string(j + i * 2), 4, 4, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new Sheep(randPos.first, randPos.second, this);
 						break;
 					}
 					case 2: {
-						map[randPos.second][randPos.first]->org = new Fox("nic", "Fox" + to_string(j + i * 2), 3, 7, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new Fox(randPos.first, randPos.second, this);
 						break;
 					}
 					case 3: {
-						map[randPos.second][randPos.first]->org = new Turtle("nic", "Turtle" + to_string(j + i * 2), 2, 1, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new Turtle(randPos.first, randPos.second, this);
 						break;
 					}
 					case 4: {
-						map[randPos.second][randPos.first]->org = new Antelope("nic", "Antelope" + to_string(j + i * 2), 4, 4, 0, randPos.first, randPos.second, this);
+						map[randPos.second][randPos.first]->org = new Antelope(randPos.first, randPos.second, this);
 						break;
 					}
 					}
@@ -104,6 +104,30 @@ World::World(const short& w, const short& h) :height(h + 2), width(w + 2) {
 
 void World::drawWorld() {
 	cout << "Author: Nikolai Lavrinov 201302\n";
+	cout << worldToString();
+}
+
+std::string World::worldToString() {
+	w_string = "";
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			string symbol = map[i][j]->symbol;
+			if (symbol == "") {
+				auto org = getOrganism(j, i);
+				if (org != nullptr) {
+					// zamienić na metodę drawOrganism()
+					symbol = org->getIkona();
+				}
+				else {
+					symbol = ".";
+				}
+			}
+			w_string += symbol;
+		}
+		w_string += '\n';
+	}
+	w_string += '\n';
+	return w_string;
 }
 
 
@@ -233,6 +257,7 @@ void World::takeATurn() {
 			}
 		}
 	}
+	cout << worldToString();
 
 	for (auto* plant : plants) {
 		if (!dynamic_cast<Plant*>(plant)->getIsMoved() && plant->getX() != -1) {
@@ -244,6 +269,8 @@ void World::takeATurn() {
 			break;
 		}
 	}
+	cout << worldToString();
+
 }
 
 void World::addOrganism(Organism* org, const short& x, const short& y) {
@@ -267,19 +294,19 @@ void World::setOrganism(Organism* plant, const short& x, const short& y) {
 	if (getOrganism(x, y) == nullptr) {
 		Plant* cast = dynamic_cast<Plant*>(plant);
 		if (dynamic_cast<Grass*>(cast)) {
-			map[y][x]->org = new Grass("nic", "Nowa", 0, 0, 0, x, y, this);
+			map[y][x]->org = new Grass(x, y, this);
 		}
 		else if (dynamic_cast<Guarana*>(cast)) {
-			map[y][x]->org = new Guarana("nic", "Guarana", 0, 0, 0, x, y, this);
+			map[y][x]->org = new Guarana(x, y, this);
 		}
 		else if (dynamic_cast<Mlecz*>(cast)) {
-			map[y][x]->org = new Mlecz("nic", "Mlecz", 0, 0, 0, x, y, this);
+			map[y][x]->org = new Mlecz(x, y, this);
 		}
 		else if (dynamic_cast<WilczeJagody*>(cast)) {
-			map[y][x]->org = new WilczeJagody("nic", "WilczeJagody", 99, 0, 0, x, y, this);
+			map[y][x]->org = new WilczeJagody(x, y, this);
 		}
 		else if (dynamic_cast<BarszczSosnowskiego*>(cast)) {
-			map[y][x]->org = new BarszczSosnowskiego("nic", "BarszczSosnowskiego", 10, 0, 0, x, y, this);
+			map[y][x]->org = new BarszczSosnowskiego(x, y, this);
 		}
 		else {
 			cout << "\nbrak tego gotunku czy inny błąd\n";

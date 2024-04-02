@@ -17,19 +17,19 @@ Animal::Animal(const string& ikona, const string& name, const short& power, cons
 Organism* Animal::createAnimalWithType(Organism* animal, const short& x, const short& y) {
 	auto cast = dynamic_cast<Animal*>(animal);
 	if (dynamic_cast<Antelope*>(cast)) {
-		return new Antelope("nic", "Antelope", 4, 4, 0, x, y, animal->getWorld());
+		return new Antelope(x, y, animal->getWorld());
 	}
 	else if (dynamic_cast<Fox*>(cast)) {
-		return new Fox("nic", "Fox", 3, 7, 0, x, y, animal->getWorld());
+		return new Fox(x, y, animal->getWorld());
 	}
 	else if (dynamic_cast<Sheep*>(cast)) {
-		return new Sheep("nic", "Sheep", 4, 4, 0, x, y, animal->getWorld());
+		return new Sheep(x, y, animal->getWorld());
 	}
 	else if (dynamic_cast<Turtle*>(cast)) {
-		return new Turtle("nic", "Turtle", 2, 1, 0, x, y, animal->getWorld());
+		return new Turtle(x, y, animal->getWorld());
 	}
 	else if (dynamic_cast<Wolf*>(cast)) {
-		return new Wolf("nic", "Wolf", 9, 4, 0, x, y, animal->getWorld());
+		return new Wolf(x, y, animal->getWorld());
 	}
 	else {
 		cout << "\nThe absence of this type of animal or the organism is not an animal\n";

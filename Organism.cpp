@@ -11,3 +11,7 @@ void Organism::deleteOrganism() {
 	x = -1;
 	y = -1;
 }
+
+std::string Organism::getIkona() const {
+	return ikona;
+}

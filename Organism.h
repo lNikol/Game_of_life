@@ -1,4 +1,5 @@
 #pragma once
+#define USE_EMOJI 1
 #include <string>
 #include <random>
 class World;
@@ -19,6 +20,7 @@ public:
 	virtual std::string getName() const = 0;
 	virtual short getPower() const = 0;
 	virtual short getInitiative() const = 0;
+	virtual std::string getIkona() const;
 	virtual short getAge() const = 0;
 	virtual short getX() const = 0;
 	virtual short getY() const = 0;
