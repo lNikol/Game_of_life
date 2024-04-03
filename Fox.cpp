@@ -1,13 +1,12 @@
 ﻿#include "Fox.h"
 using namespace std;
+
 Fox::Fox(const short& x, const short& y, World* world) :
 	Animal("F", "Fox", 3, 7, 0, x, y, world) {
-	std::cout << "Fox (" << name << ", " << x << ", " << y << ") was created\n";
+	cout << "Fox (" << name << ", " << x << ", " << y << ") was created\n";
 }
 
-// jesli okolo lisa sa kilka pustych komorek, to trzeba losowe wybrac czy pojsc do pierwszej pustej?
-// zakladam, ze do piwerszej pustej komorki
-// kiedy lis znajdzie pusta komorke od poczatku to idzie dotad
+// kiedy lis znajdzie pusta komorke od poczatku to idzie tam
 
 void Fox::action() {
 	isMoved = true;

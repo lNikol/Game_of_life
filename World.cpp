@@ -9,6 +9,7 @@
 #include "Sheep.h"
 #include "Turtle.h"
 #include "Wolf.h"
+#include "Human.h"
 #include <iostream>
 using namespace std;
 
@@ -42,6 +43,10 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}			
 		}
 	}
+	
+	Human* human = new Human(1, 1, this);
+	animals.push_back(human);
+	map[1][1]->org = human;
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
@@ -71,32 +76,32 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 					}
 					plants.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na rośliny
 				}
-				else if (j % 4 == 0) {
-					std::pair<short, short> randPos = randomPos();
-					switch ((i + j) % 5) {
-					case 0: {
-						map[randPos.second][randPos.first]->org = new Wolf(randPos.first, randPos.second, this);
-						break;
-					}
-					case 1: {
-						map[randPos.second][randPos.first]->org = new Sheep(randPos.first, randPos.second, this);
-						break;
-					}
-					case 2: {
-						map[randPos.second][randPos.first]->org = new Fox(randPos.first, randPos.second, this);
-						break;
-					}
-					case 3: {
-						map[randPos.second][randPos.first]->org = new Turtle(randPos.first, randPos.second, this);
-						break;
-					}
-					case 4: {
-						map[randPos.second][randPos.first]->org = new Antelope(randPos.first, randPos.second, this);
-						break;
-					}
-					}
-					animals.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na zwierzęta
-				}
+				//else if (j % 4 == 0) {
+				//	std::pair<short, short> randPos = randomPos();
+				//	switch ((i + j) % 5) {
+				//	case 0: {
+				//		map[randPos.second][randPos.first]->org = new Wolf(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	case 1: {
+				//		map[randPos.second][randPos.first]->org = new Sheep(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	case 2: {
+				//		map[randPos.second][randPos.first]->org = new Fox(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	case 3: {
+				//		map[randPos.second][randPos.first]->org = new Turtle(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	case 4: {
+				//		map[randPos.second][randPos.first]->org = new Antelope(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	}
+				//	animals.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na zwierzęta
+				//}
 			}
 		}
 	}
@@ -107,12 +112,17 @@ void World::drawWorld() {
 	cout << worldToString();
 }
 
+bool World::getIsEnd() const {
+	return isEnd;
+}
+
 std::string World::worldToString() {
 	w_string = "";
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			string symbol = map[i][j]->symbol;
 			if (symbol == "") {
+				// karta nie usuwa symbol czlowieka, zobaczyc dlaczego
 				auto org = getOrganism(j, i);
 				if (org != nullptr) {
 					// zamienić na metodę drawOrganism()
@@ -153,6 +163,7 @@ void World::deleteOrganism(Organism* org, short x, short y) {
 		cout << "World::deleteOrganism: " << org->getName();
 		cout << " " << org->getX() << " " << org->getY() << endl;
 		this->map[y][x]->org = nullptr;
+		this->map[y][x]->symbol = "";
 		bool isDeleted = false;
 		if (dynamic_cast<Animal*>(org)) {
 			for (int i = 0; i < animals.size(); i++) {
@@ -189,6 +200,7 @@ void World::deleteOrganism(Organism* org, short x, short y) {
 
 void World::replaceOrganism(Organism* org, const short& x, const short& y) {
 	map[y][x]->org = org;
+	if (org == nullptr) map[y][x]->symbol = "";
 }
 
 short World::getWidth() const {
@@ -200,76 +212,84 @@ short World::getHeight() const {
 }
 
 void World::takeATurn() {
-	short childrenSize = children.size();
-	for (int i = 0; i < childrenSize; i++) {
-		if (children[i] != nullptr) {
-		if (dynamic_cast<Animal*>(children[i])) {
-			animals.push_back(children[i]);
-		}
-		else if (dynamic_cast<Plant*>(children[i])) {
-			plants.push_back(children[i]);
-		}
-		}
-	}
-	children.clear();
-
-	short anSize = animals.size();
-	for (int i = 0; i < anSize; i++) {
-		dynamic_cast<Animal*>(animals[i])->setIsMoved(false);
-		animals[i]->setAge(animals[i]->getAge() + 1);
-		//cout <<"XY: " << animals[i]->getX() << " " << animals[i]->getY() << endl;
-	}
-
-	// sortowanie po inicjatywie i wieku
-	sort(animals.begin(), animals.end(),
-		[](const Organism* a, const Organism* b) {
-			if (a->getInitiative() == b->getInitiative()) {
-				return a->getAge() > b->getAge();
+	if (isEnd) return;
+	else {
+		short childrenSize = children.size();
+		for (int i = 0; i < childrenSize; i++) {
+			if (children[i] != nullptr) {
+				if (dynamic_cast<Animal*>(children[i])) {
+					animals.push_back(children[i]);
+				}
+				else if (dynamic_cast<Plant*>(children[i])) {
+					plants.push_back(children[i]);
+				}
 			}
-			else {
-				return a->getInitiative() > b->getInitiative();
+		}
+		children.clear();
+
+		short anSize = animals.size();
+		for (int i = 0; i < anSize; i++) {
+			dynamic_cast<Animal*>(animals[i])->setIsMoved(false);
+			animals[i]->setAge(animals[i]->getAge() + 1);
+			//cout <<"XY: " << animals[i]->getX() << " " << animals[i]->getY() << endl;
+		}
+
+		// sortowanie po inicjatywie i wieku
+		sort(animals.begin(), animals.end(),
+			[](const Organism* a, const Organism* b) {
+				if (a->getInitiative() == b->getInitiative()) {
+					return a->getAge() > b->getAge();
+				}
+				else {
+					return a->getInitiative() > b->getInitiative();
+				}
+			});
+
+
+		short int plSize = plants.size();
+		for (int i = 0; i < plSize; i++) {
+			plants[i]->setAge(plants[i]->getAge() + 1);
+		}
+		cout << worldToString();
+
+		//int k = 0;
+
+		for (auto* animal : animals) {
+			//cout << "auto size: " << animals.size() << endl;
+			//k++;
+			//cout << "Auto* animal: " << animal;
+			//cout << " " << animal->getX() << ", " << animal->getY() << endl;
+			//cout << "k: " << k << endl;
+			if (dynamic_cast<Animal*>(animal) != nullptr) {
+				cout << "auto XY: " << animal->getX() << " " << animal->getY() << endl;
+				if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
+					animal->action();
+				}
+				if (animal->getX() == -1) {
+					if (dynamic_cast<Human*>(animal)) {
+						isEnd = true;
+						cout << "You was killed\n";
+						return;
+					}
+					cout << "\n\n-------  " << animal->getName() << "  ------------------------------- MINUS JEDEN ---------------------------------------\n\n";
+					cout << endl;
+					break;
+				}
 			}
-		});
-
-
-	short int plSize = plants.size();
-	for (int i = 0; i < plSize; i++) {
-		plants[i]->setAge(plants[i]->getAge() + 1);
-	}
-
-	//int k = 0;
-
-	for (auto* animal : animals) {
-		//cout << "auto size: " << animals.size() << endl;
-		//k++;
-		//cout << "Auto* animal: " << animal;
-		//cout << " " << animal->getX() << ", " << animal->getY() << endl;
-		//cout << "k: " << k << endl;
-		if (dynamic_cast<Animal*>(animal) != nullptr) {
-			cout << "auto XY: " << animal->getX() << " " << animal->getY() << endl;
-			if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
-				animal->action();
+		}
+		for (auto* plant : plants) {
+			if (!dynamic_cast<Plant*>(plant)->getIsMoved() && plant->getX() != -1) {
+				plant->action();
 			}
-			if (animal->getX() == -1) {
-				cout << "\n\n-------  " << animal->getName() << "  ------------------------------- MINUS JEDEN ---------------------------------------\n\n";
+			if (plant->getX() == -1) {
+				cout << "\n\n-------  " << plant->getName() << "  ------------------------------- MINUS KWIAT ---------------------------------------\n\n";
 				cout << endl;
 				break;
 			}
 		}
+		cout << worldToString();
 	}
-	cout << worldToString();
-
-	for (auto* plant : plants) {
-		if (!dynamic_cast<Plant*>(plant)->getIsMoved() && plant->getX() != -1) {
-			plant->action();
-		}
-		if (plant->getX() == -1) {
-			cout << "\n\n-------  " << plant->getName() << "  ------------------------------- MINUS KWIAT ---------------------------------------\n\n";
-			cout << endl;
-			break;
-		}
-	}
-	cout << worldToString();
+	
 
 }
 

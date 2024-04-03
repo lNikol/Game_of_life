@@ -1,5 +1,4 @@
 #pragma once
-#define USE_EMOJI 1
 #include <string>
 #include <random>
 class World;

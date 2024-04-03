@@ -6,6 +6,7 @@
 #include <vector>
 
 class World {
+	bool isEnd = false;
 protected:
 	short width = 0, height = 0;
 	std::vector<Organism*> plants;
@@ -22,6 +23,7 @@ public:
 	void addOrganism(Organism* org, const short& x, const short& y);
 	short getWidth() const;
 	short getHeight() const;
+	bool getIsEnd() const;
 	void deleteOrganism(Organism* org, short x, short y);
 	void replaceOrganism(Organism* org, const short& x, const short& y);
 	std::pair<short, short> randomPos();

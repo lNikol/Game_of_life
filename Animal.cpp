@@ -116,6 +116,8 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 		if (y == 1) {
 			if (x == 1) {
 				if (world->getOrganism(x + 1, y) == nullptr) {
+					// jako opcja zamienić te dwie linijki na funkcję
+					// world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1 , y);
 					Organism* child = createAnimalWithType(other, x + 1, y);
 					world->addOrganism(child, x + 1, y);
 					return true;
@@ -474,7 +476,7 @@ void Animal::action() {
 }
 
 void Animal::collision(Organism* other) {
-if(other!=nullptr) cout << "animal::collision: " << other->getName() << " " << other->getX() << " " << other->getY() << endl;
+	if (other != nullptr) cout << "animal::collision: " << other->getName() << " " << other->getX() << " " << other->getY() << endl;
 	//dodac warunki jesli organism == nullptr
 	if (dynamic_cast<Animal*>(other)) {
 		if (checkType(this, dynamic_cast<Animal*>(other))) {
@@ -502,7 +504,7 @@ if(other!=nullptr) cout << "animal::collision: " << other->getName() << " " << o
 			}
 			else {
 				if (dynamic_cast<Turtle*>(other)) {
-					//	Zapytać:
+					//	Zapytać: zamienić
 					// Przykładowo błędem będzie zaimplementowanie w metodzie kolizja() klasy Zwierze
 					// sprawdzania czy organizm z którym zderzył się organizm atakujący jest klasy Zolw, a
 					// następnie porównywanie siły i pozostawanie na tym samym polu jeśli jest to konieczne.
@@ -552,13 +554,9 @@ if(other!=nullptr) cout << "animal::collision: " << other->getName() << " " << o
 
 
 void Animal::deleteOrganism() {
-	power = -1;
-	initiative = -1;
-	age = -1;
-	x = -1;
-	y = -1;
 	oldX = -1;
 	oldY = -1;
+	Organism::deleteOrganism();
 }
 
 
