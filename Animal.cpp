@@ -479,6 +479,7 @@ void Animal::collision(Organism* other) {
 	if (other != nullptr) cout << "animal::collision: " << other->getName() << " " << other->getX() << " " << other->getY() << endl;
 	//dodac warunki jesli organism == nullptr
 	if (dynamic_cast<Animal*>(other)) {
+		// moga byc problemy podczas usuwania organizmu
 		if (checkType(this, dynamic_cast<Animal*>(other))) {
 			if (reproduction(this, oldX, oldY) == false) {
 				if (reproduction(dynamic_cast<Animal*>(other), other->getX(), other->getY()) == false) {
@@ -500,7 +501,7 @@ void Animal::collision(Organism* other) {
 			cout << "otherPower: " << otherPower << " " << other->getX() << " " << other->getY() << endl;
 			if (otherPower == -1) {
 				world->replaceOrganism(this, x, y);
-				world->replaceOrganism(nullptr, oldX, oldY);
+				world->deleteOrganism(nullptr, oldX, oldY);
 			}
 			else {
 				if (dynamic_cast<Turtle*>(other)) {
@@ -525,6 +526,8 @@ void Animal::collision(Organism* other) {
 							<< other->getX() << ", " << other->getY() << ") end go to the position (" << x << ", " << y << ")\n";
 						world->deleteOrganism(other, other->getX(), other->getY());
 						world->replaceOrganism(this, x, y);
+						world->deleteOrganism(this, oldX, oldY);
+
 						oldX = x;
 						oldY = y;
 					}
@@ -545,8 +548,9 @@ void Animal::collision(Organism* other) {
 		}
 	}
 	else {
+		// sa problemy podczas usuwania organizmu
 		world->replaceOrganism(this, x, y);
-		world->replaceOrganism(nullptr, oldX, oldY);
+		world->deleteOrganism(nullptr, oldX, oldY);
 		oldX = x;
 		oldY = y;
 	}

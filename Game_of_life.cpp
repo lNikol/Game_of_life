@@ -39,7 +39,7 @@ int main()
 
 	World game(10, 10);
 
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 10; i++) {
 		game.takeATurn();
 		if (game.getIsEnd()) return 0;
 		cout << i << " end turn\n\n\n\n\n\n";

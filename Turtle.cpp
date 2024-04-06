@@ -43,7 +43,7 @@ void Turtle::collision(Organism* org) {
 			short otherPower = other->getPower();
 			if (otherPower == -1) {
 				world->replaceOrganism(this, x, y);
-				world->replaceOrganism(nullptr, oldX, oldY);
+				world->deleteOrganism(nullptr, oldX, oldY);
 				oldX = x;
 				oldY = y;
 			}

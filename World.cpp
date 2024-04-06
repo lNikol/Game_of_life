@@ -44,38 +44,38 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 		}
 	}
 	
-	Human* human = new Human(1, 1, this);
-	animals.push_back(human);
-	map[1][1]->org = human;
+	//Human* human = new Human(1, 1, this);
+	//animals.push_back(human);
+	//map[1][1]->org = human;
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
-				if (j % 4 == 1) {
-					std::pair<short, short> randPos = randomPos();
-					switch ((i + j) % 5) {
-					case 0: {
-						map[randPos.second][randPos.first]->org = new Guarana(randPos.first, randPos.second, this);
-						break;
-					}
-					case 1: {
-						map[randPos.second][randPos.first]->org = new WilczeJagody(randPos.first, randPos.second, this);
-						break;
-					}
-					case 2: {
-						map[randPos.second][randPos.first]->org = new BarszczSosnowskiego(randPos.first, randPos.second, this);
-						break;
-					}
-					case 3: {
-						map[randPos.second][randPos.first]->org = new Grass(randPos.first, randPos.second, this);
-						break;
-					}
-					case 4: {
-						map[randPos.second][randPos.first]->org = new Mlecz(randPos.first, randPos.second, this);
-						break;
-					}
-					}
-					plants.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na rośliny
-				}
+				//if (j % 4 == 1) {
+				//	std::pair<short, short> randPos = randomPos();
+				//	switch ((i + j) % 5) {
+				//	case 0: {
+				//		map[randPos.second][randPos.first]->org = new Guarana(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	case 1: {
+				//		map[randPos.second][randPos.first]->org = new WilczeJagody(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	case 2: {
+				//		map[randPos.second][randPos.first]->org = new BarszczSosnowskiego(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	case 3: {
+				//		map[randPos.second][randPos.first]->org = new Grass(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	case 4: {
+				//		map[randPos.second][randPos.first]->org = new Mlecz(randPos.first, randPos.second, this);
+				//		break;
+				//	}
+				//	}
+				//	plants.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na rośliny
+				//}
 				//else if (j % 4 == 0) {
 				//	std::pair<short, short> randPos = randomPos();
 				//	switch ((i + j) % 5) {
@@ -105,6 +105,12 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}
 		}
 	}
+	std::pair<short, short> randPos = randomPos();
+	map[1][1]->org = new Fox(1, 1, this);
+	animals.push_back(map[1][1]->org);
+	randPos = randomPos();
+	map[1][2]->org = new Fox(1, 2, this);
+	animals.push_back(map[1][2]->org);
 }
 
 void World::drawWorld() {
@@ -126,6 +132,7 @@ std::string World::worldToString() {
 				auto org = getOrganism(j, i);
 				if (org != nullptr) {
 					// zamienić na metodę drawOrganism()
+					cout << "Symbol ("<< org->getIkona()<< ") in: " << i << " " << j << endl;
 					symbol = org->getIkona();
 				}
 				else {
@@ -142,6 +149,7 @@ std::string World::worldToString() {
 
 
 std::pair<short, short> World::randomPos() {
+	srand(time(NULL));
 	short h = height - 2;
 	short w = width - 2;
 	short x = rand() % w + 1;
@@ -154,7 +162,7 @@ std::pair<short, short> World::randomPos() {
 }
 
 Organism* World::getOrganism(const short& x, const short& y) const {
-	return this->map[y][x]->org;
+	return map[y][x]->org;
 }
 
 void World::deleteOrganism(Organism* org, short x, short y) {
@@ -162,8 +170,8 @@ void World::deleteOrganism(Organism* org, short x, short y) {
 	if (org != nullptr) {
 		cout << "World::deleteOrganism: " << org->getName();
 		cout << " " << org->getX() << " " << org->getY() << endl;
-		this->map[y][x]->org = nullptr;
-		this->map[y][x]->symbol = "";
+		map[y][x]->org = nullptr;
+		map[y][x]->symbol = "";
 		bool isDeleted = false;
 		if (dynamic_cast<Animal*>(org)) {
 			for (int i = 0; i < animals.size(); i++) {
@@ -196,11 +204,14 @@ void World::deleteOrganism(Organism* org, short x, short y) {
 			}
 		}
 	}
+	else {
+		map[y][x]->org = nullptr;
+		map[y][x]->symbol = "";
+	}
 }
 
-void World::replaceOrganism(Organism* org, const short& x, const short& y) {
+void World::replaceOrganism(Organism* org, short x, short y) {
 	map[y][x]->org = org;
-	if (org == nullptr) map[y][x]->symbol = "";
 }
 
 short World::getWidth() const {
@@ -252,14 +263,8 @@ void World::takeATurn() {
 		}
 		cout << worldToString();
 
-		//int k = 0;
 
 		for (auto* animal : animals) {
-			//cout << "auto size: " << animals.size() << endl;
-			//k++;
-			//cout << "Auto* animal: " << animal;
-			//cout << " " << animal->getX() << ", " << animal->getY() << endl;
-			//cout << "k: " << k << endl;
 			if (dynamic_cast<Animal*>(animal) != nullptr) {
 				cout << "auto XY: " << animal->getX() << " " << animal->getY() << endl;
 				if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {

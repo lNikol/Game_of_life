@@ -25,7 +25,7 @@ public:
 	short getHeight() const;
 	bool getIsEnd() const;
 	void deleteOrganism(Organism* org, short x, short y);
-	void replaceOrganism(Organism* org, const short& x, const short& y);
+	void replaceOrganism(Organism* org, short x, short y);
 	std::pair<short, short> randomPos();
 	std::string worldToString();
 	//~World();

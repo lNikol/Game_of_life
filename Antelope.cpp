@@ -38,11 +38,11 @@ void Antelope::collision(Organism* org) {
 					if (x == 1) {
 						if (world->getOrganism(x, y + 1) == nullptr) {
 							y += 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else if (world->getOrganism(x + 1, y) == nullptr) {
 							x += 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							cout << "There are no empty space around " << name << ", there will be a fight\n";
@@ -52,11 +52,11 @@ void Antelope::collision(Organism* org) {
 					else if (x == width) {
 						if (world->getOrganism(x, y + 1) == nullptr) {
 							y += 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else if (world->getOrganism(x - 1, y) == nullptr) {
 							x -= 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							cout << "There are no empty space around " << name << ", there will be a fight\n";
@@ -66,15 +66,15 @@ void Antelope::collision(Organism* org) {
 					else {
 						if (world->getOrganism(x, y + 1) == nullptr) {
 							y += 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else if (world->getOrganism(x + 1, y) == nullptr) {
 							x += 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else if (world->getOrganism(x - 1, y) == nullptr) {
 							x -= 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							cout << "There are no empty space around " << name << ", there will be a fight\n";
@@ -86,11 +86,11 @@ void Antelope::collision(Organism* org) {
 					if (x == 1) {
 						if (world->getOrganism(x, y - 1) == nullptr) {
 							y -= 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else if (world->getOrganism(x + 1, y) == nullptr) {
 							x += 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							cout << "There are no empty space around " << name << ", there will be a fight\n";
@@ -100,11 +100,11 @@ void Antelope::collision(Organism* org) {
 					else if (x == width) {
 						if (world->getOrganism(x, y - 1) == nullptr) {
 							y -= 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else if (world->getOrganism(x - 1, y) == nullptr) {
 							x -= 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							cout << "There are no empty space around " << name << ", there will be a fight\n";
@@ -114,15 +114,15 @@ void Antelope::collision(Organism* org) {
 					else {
 						if (world->getOrganism(x, y - 1) == nullptr) {
 							y -= 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else if (world->getOrganism(x + 1, y) == nullptr) {
 							x += 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else if (world->getOrganism(x - 1, y) == nullptr) {
 							x -= 1;
-							collision(world->getOrganism(x, y));
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							cout << "There are no empty space around " << name << ", there will be a fight\n";
@@ -133,15 +133,15 @@ void Antelope::collision(Organism* org) {
 				else if (x == width && (y >= 2 && y < height)) {
 					if (world->getOrganism(x, y + 1) == nullptr) {
 						y += 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else if (world->getOrganism(x, y - 1) == nullptr) {
 						y -= 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else if (world->getOrganism(x - 1, y) == nullptr) {
 						x -= 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else {
 						cout << "There are no empty space around " << name << ", there will be a fight\n";
@@ -151,15 +151,15 @@ void Antelope::collision(Organism* org) {
 				else if (x == 1 && (y >= 2 && y < height)) {
 					if (world->getOrganism(x, y + 1) == nullptr) {
 						y += 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else if (world->getOrganism(x, y - 1) == nullptr) {
 						y -= 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else if (world->getOrganism(x + 1, y) == nullptr) {
 						x += 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else {
 						cout << "There are no empty space around " << name << ", there will be a fight\n";
@@ -169,19 +169,19 @@ void Antelope::collision(Organism* org) {
 				else {
 					if (world->getOrganism(x, y + 1) == nullptr) {
 						y += 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else if (world->getOrganism(x, y - 1) == nullptr) {
 						y -= 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else if (world->getOrganism(x + 1, y) == nullptr) {
 						x += 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else if (world->getOrganism(x - 1, y) == nullptr) {
 						x -= 1;
-						collision(world->getOrganism(x, y));
+						Animal::collision(world->getOrganism(x, y));
 					}
 					else {
 						cout << "There are no empty space around " << name << ", there will be a fight\n";
