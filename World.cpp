@@ -44,9 +44,9 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 		}
 	}
 	
-	//Human* human = new Human(1, 1, this);
-	//animals.push_back(human);
-	//map[1][1]->org = human;
+	Human* human = new Human(1, 1, this);
+	animals.push_back(human);
+	map[1][1]->org = human;
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
@@ -105,15 +105,18 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}
 		}
 	}
-	std::pair<short, short> randPos = randomPos();
-	map[1][1]->org = new Fox(1, 1, this);
-	animals.push_back(map[1][1]->org);
-	randPos = randomPos();
-	map[1][2]->org = new Fox(1, 2, this);
-	animals.push_back(map[1][2]->org);
+	//std::pair<short, short> randPos = randomPos();
+	//map[1][1]->org = new Fox(1, 1, this);
+	//animals.push_back(map[1][1]->org);
+	//randPos = randomPos();
+	//map[1][2]->org = new Fox(2, 1, this);
+	//animals.push_back(map[1][2]->org);
+	//map[2][1]->org = new Fox(1, 2, this);
+	//animals.push_back(map[2][1]->org);
 }
 
 void World::drawWorld() {
+	// zrobic oczyszczenie mapy kiedy ktos pochodzi
 	cout << "Author: Nikolai Lavrinov 201302\n";
 	cout << worldToString();
 }
@@ -122,7 +125,7 @@ bool World::getIsEnd() const {
 	return isEnd;
 }
 
-std::string World::worldToString() {
+string World::worldToString() {
 	w_string = "";
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
@@ -132,7 +135,6 @@ std::string World::worldToString() {
 				auto org = getOrganism(j, i);
 				if (org != nullptr) {
 					// zamienić na metodę drawOrganism()
-					cout << "Symbol ("<< org->getIkona()<< ") in: " << i << " " << j << endl;
 					symbol = org->getIkona();
 				}
 				else {
@@ -148,7 +150,7 @@ std::string World::worldToString() {
 }
 
 
-std::pair<short, short> World::randomPos() {
+pair<short, short> World::randomPos() {
 	srand(time(NULL));
 	short h = height - 2;
 	short w = width - 2;
@@ -161,7 +163,7 @@ std::pair<short, short> World::randomPos() {
 	return std::make_pair<short&, short&>(x, y);
 }
 
-Organism* World::getOrganism(const short& x, const short& y) const {
+Organism* World::getOrganism(short x, short y) const {
 	return map[y][x]->org;
 }
 
@@ -174,6 +176,10 @@ void World::deleteOrganism(Organism* org, short x, short y) {
 		map[y][x]->symbol = "";
 		bool isDeleted = false;
 		if (dynamic_cast<Animal*>(org)) {
+			if (dynamic_cast<Human*>(org)) {
+				isEnd = true;
+				cout << "\n\n\n\n\n\n\n\n\n\n\nYou was killed\n\n\n\n\n\n\n\n\n\n";
+			}
 			for (int i = 0; i < animals.size(); i++) {
 				if (animals[i] == org) {
 					animals[i]->deleteOrganism();
@@ -240,7 +246,7 @@ void World::takeATurn() {
 
 		short anSize = animals.size();
 		for (int i = 0; i < anSize; i++) {
-			dynamic_cast<Animal*>(animals[i])->setIsMoved(false);
+			animals[i]->setIsMoved(false);
 			animals[i]->setAge(animals[i]->getAge() + 1);
 			//cout <<"XY: " << animals[i]->getX() << " " << animals[i]->getY() << endl;
 		}
@@ -259,6 +265,7 @@ void World::takeATurn() {
 
 		short int plSize = plants.size();
 		for (int i = 0; i < plSize; i++) {
+			plants[i]->setIsMoved(false);
 			plants[i]->setAge(plants[i]->getAge() + 1);
 		}
 		cout << worldToString();
@@ -266,22 +273,18 @@ void World::takeATurn() {
 
 		for (auto* animal : animals) {
 			if (dynamic_cast<Animal*>(animal) != nullptr) {
-				cout << "auto XY: " << animal->getX() << " " << animal->getY() << endl;
+				cout << "auto XY: " << animal->getX() << " " << animal->getY() << " " << animal->getName() << endl;
 				if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
 					animal->action();
 				}
 				if (animal->getX() == -1) {
-					if (dynamic_cast<Human*>(animal)) {
-						isEnd = true;
-						cout << "You was killed\n";
-						return;
-					}
 					cout << "\n\n-------  " << animal->getName() << "  ------------------------------- MINUS JEDEN ---------------------------------------\n\n";
 					cout << endl;
 					break;
 				}
 			}
 		}
+
 		for (auto* plant : plants) {
 			if (!dynamic_cast<Plant*>(plant)->getIsMoved() && plant->getX() != -1) {
 				plant->action();
@@ -298,7 +301,7 @@ void World::takeATurn() {
 
 }
 
-void World::addOrganism(Organism* org, const short& x, const short& y) {
+void World::addOrganism(Organism* org, short x, short y) {
 	//cout << "addOrganism size before: " << children.size() << endl;
 	if (dynamic_cast<Animal*>(org)) {
 		map[y][x]->org = org;
@@ -315,7 +318,7 @@ void World::addOrganism(Organism* org, const short& x, const short& y) {
 	//cout << "addOrganism size after: " << children.size() << endl;
 }
 
-void World::setOrganism(Organism* plant, const short& x, const short& y) {
+void World::setOrganism(Organism* plant, short x, short y) {
 	if (getOrganism(x, y) == nullptr) {
 		Plant* cast = dynamic_cast<Plant*>(plant);
 		if (dynamic_cast<Grass*>(cast)) {

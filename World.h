@@ -18,9 +18,9 @@ public:
 	World(const short& w, const short& h);
 	void takeATurn();
 	void drawWorld();
-	Organism* getOrganism(const short& x, const short& y) const;
-	void setOrganism(Organism* plant, const short& x, const short& y);
-	void addOrganism(Organism* org, const short& x, const short& y);
+	Organism* getOrganism(short x, short y) const;
+	void setOrganism(Organism* plant, short x, short y);
+	void addOrganism(Organism* org, short x, short y);
 	short getWidth() const;
 	short getHeight() const;
 	bool getIsEnd() const;

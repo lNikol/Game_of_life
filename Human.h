@@ -3,6 +3,7 @@
 class Human : public Animal {
 private:
 	short turnCounter = 0;
+	short counterAfterAbility = 0;
 	bool isAbilityOn = false; 
 	bool isAlive = true;
 public:
