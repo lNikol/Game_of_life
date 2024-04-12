@@ -10,26 +10,7 @@ using namespace std;
 int main()
 {
 	cout << "\nI recommend setting the map size to at least 10x10 to get all kinds of organisms\n\n";
-	short int N = 0, M = 0;
-	int key;
-
-	//std::cout << "Naciśnij klawisz (q - wyjście): ";
-
-	//do {
-	//	key = _getch();  // dla Windows
-	//	//328 do gory
-	//	//336 do dolu
-	//	//331 w lewo
-	//	//333 w prawo
-	//	if (key == 224) {  // Sprawdzenie czy klawisz specjalny
-	//		key = _getch();  // Pobranie rzeczywistego kodu klawisza
-	//		std::cout << "sKod klawisza: " << key + 256 << std::endl;  // Dodanie 256, aby otrzymać kod > 255
-	//	}
-	//	else {
-	//		std::cout << "Kod klawisza: " << key << std::endl;
-	//	}
-
-	//} while (key != 'q');
+	short N = 0, M = 0;
 	//cout << "Write size  of map (width x height):\n";
 	//cin >> N >> M;
 	//while ((N > 201 || N < 10) || (M > 201 || M < 10)) {

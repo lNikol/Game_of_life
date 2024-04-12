@@ -8,7 +8,7 @@ Mlecz::Mlecz(const short& x, const short& y, World* world) ://, World* world
 }
 
 void Mlecz::action() {
-	cout << "Action in Mlecz (" << name << ", " << x << ", " << y << ")\n";
+	//cout << "Action in Mlecz (" << name << ", " << x << ", " << y << ")\n";
 	for (int i = 0; i < 3; ++i) {
 		Plant::action();
 	}

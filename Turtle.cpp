@@ -25,14 +25,14 @@ void Turtle::collision(Organism* org) {
 		if (checkType(this, other)) {
 			if (reproduction(this, oldX, oldY) == false) {
 				if (reproduction(other, other->getX(), other->getY()) == false) {
-					cout << "Couldn't add a child\n";
+					//cout << "Couldn't add a child\n";
 				}
 				else {
-					cout << "Child was added from second\n";
+					//cout << "Child was added from second\n";
 				}
 			}
 			else {
-				cout << "Child was added from first\n";
+				//cout << "Child was added from first\n";
 			}
 			x = oldX;
 			y = oldY;
@@ -43,34 +43,34 @@ void Turtle::collision(Organism* org) {
 			short otherPower = other->getPower();
 			if (otherPower == -1) {
 				world->replaceOrganism(this, x, y);
-				world->deleteOrganism(nullptr, oldX, oldY);
+				world->deleteOrganism(org, oldX, oldY);
 				oldX = x;
 				oldY = y;
 			}
 			else {
 				if (power >= otherPower) {
-					cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
+					/*cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
 						<< other->getX() << ", " << other->getY() << ") end go to the position (" << x << ", " << y << ")\n";
-					world->deleteOrganism(other, other->getX(), other->getY());
-					world->deleteOrganism(nullptr, oldX, oldY);
+					*/world->deleteOrganism(other, other->getX(), other->getY());
 					world->replaceOrganism(this, x, y);
+					world->deleteOrganism(nullptr, oldX, oldY);
 					oldX = x;
 					oldY = y;
 				}
 				else {
 					if (otherPower < 5) {
-						cout << "I (" << name << ", " << x << ", " << y << ") repelled atack of the ("
+						/*cout << "I (" << name << ", " << x << ", " << y << ") repelled atack of the ("
 							<< other->getName() << ", " << other->getX() << ", " << other->getY()
 							<< ") end killed this organism and go to the position/stay in the position (" << x << ", " << y << ")\n";
-						world->deleteOrganism(other, other->getOldX(), other->getOldY());
+						*/world->deleteOrganism(other, other->getOldX(), other->getOldY());
 						world->replaceOrganism(this, x, y);
 						oldX = x;
 						oldY = y;
 					}
 					else {
-						cout << "I (" << name << ", " << x << ", " << y << ") was killed by (" << other->getName()
+						/*cout << "I (" << name << ", " << x << ", " << y << ") was killed by (" << other->getName()
 							<< ", " << other->getX() << ", " << other->getY() << ") clear map by my old position\n";
-						world->deleteOrganism(this, oldX, oldY);
+						*/world->deleteOrganism(this, oldX, oldY);
 						other->setPosition(other->getOldX(), other->getOldY());
 					}
 				}

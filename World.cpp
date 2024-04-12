@@ -11,6 +11,7 @@
 #include "Wolf.h"
 #include "Human.h"
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 //Przy uruchomieniu programu na planszy powinno się
@@ -18,6 +19,14 @@ using namespace std;
 
 World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 	map.resize(height, vector<Cell*>(width));
+	ofstream logFile("log.log", ios::beg);
+	if (!logFile.is_open()) {
+		std::cout << "\n\n\nNie mozna otworzyc log.log\n\n\n";
+	}
+	else {
+		logFile << "World: height (" + to_string(height - 2) + ") width (" + to_string(width - 2) + ")\n";
+	}
+
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			map[i][j] = new Cell;
@@ -43,65 +52,65 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}			
 		}
 	}
-	
-	Human* human = new Human(1, 1, this);
-	animals.push_back(human);
-	map[1][1]->org = human;
+	//pair<short, short> randPos = randomPos();
+	//Human* human = new Human(randPos.first, randPos.second, this);
+	//animals.push_back(human);
+	//map[human->getY()][human->getX()]->org = human;
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
-				//if (j % 4 == 1) {
-				//	std::pair<short, short> randPos = randomPos();
-				//	switch ((i + j) % 5) {
-				//	case 0: {
-				//		map[randPos.second][randPos.first]->org = new Guarana(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	case 1: {
-				//		map[randPos.second][randPos.first]->org = new WilczeJagody(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	case 2: {
-				//		map[randPos.second][randPos.first]->org = new BarszczSosnowskiego(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	case 3: {
-				//		map[randPos.second][randPos.first]->org = new Grass(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	case 4: {
-				//		map[randPos.second][randPos.first]->org = new Mlecz(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	}
-				//	plants.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na rośliny
-				//}
-				//else if (j % 4 == 0) {
-				//	std::pair<short, short> randPos = randomPos();
-				//	switch ((i + j) % 5) {
-				//	case 0: {
-				//		map[randPos.second][randPos.first]->org = new Wolf(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	case 1: {
-				//		map[randPos.second][randPos.first]->org = new Sheep(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	case 2: {
-				//		map[randPos.second][randPos.first]->org = new Fox(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	case 3: {
-				//		map[randPos.second][randPos.first]->org = new Turtle(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	case 4: {
-				//		map[randPos.second][randPos.first]->org = new Antelope(randPos.first, randPos.second, this);
-				//		break;
-				//	}
-				//	}
-				//	animals.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na zwierzęta
-				//}
+				if (j % 4 == 1) {
+					pair<short, short> randPos = randomPos();
+					switch ((i + j) % 5) {
+					case 0: {
+						map[randPos.second][randPos.first]->org = new Guarana(randPos.first, randPos.second, this);
+						break;
+					}
+					case 1: {
+						map[randPos.second][randPos.first]->org = new WilczeJagody(randPos.first, randPos.second, this);
+						break;
+					}
+					case 2: {
+						map[randPos.second][randPos.first]->org = new BarszczSosnowskiego(randPos.first, randPos.second, this);
+						break;
+					}
+					case 3: {
+						map[randPos.second][randPos.first]->org = new Grass(randPos.first, randPos.second, this);
+						break;
+					}
+					case 4: {
+						map[randPos.second][randPos.first]->org = new Mlecz(randPos.first, randPos.second, this);
+						break;
+					}
+					}
+					plants.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na rośliny
+				}
+				else if (j % 4 == 0) {
+					pair<short, short> randPos = randomPos();
+					switch ((i + j) % 5) {
+					case 0: {
+						map[randPos.second][randPos.first]->org = new Wolf(randPos.first, randPos.second, this);
+						break;
+					}
+					case 1: {
+						map[randPos.second][randPos.first]->org = new Sheep(randPos.first, randPos.second, this);
+						break;
+					}
+					case 2: {
+						map[randPos.second][randPos.first]->org = new Fox(randPos.first, randPos.second, this);
+						break;
+					}
+					case 3: {
+						map[randPos.second][randPos.first]->org = new Turtle(randPos.first, randPos.second, this);
+						break;
+					}
+					case 4: {
+						map[randPos.second][randPos.first]->org = new Antelope(randPos.first, randPos.second, this);
+						break;
+					}
+					}
+					animals.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na zwierzęta
+				}
 			}
 		}
 	}
@@ -160,15 +169,28 @@ pair<short, short> World::randomPos() {
 		x = rand() % w + 1;
 		y = rand() % h + 1;
 	}
-	return std::make_pair<short&, short&>(x, y);
+	return make_pair<short&, short&>(x, y);
 }
 
-Organism* World::getOrganism(short x, short y) const {
-	return map[y][x]->org;
+Organism* World::getOrganism(const short& x, const short& y) {
+	if (x == -1) {
+		return nullptr;
+	}
+	Organism* org = map[y][x]->org;
+	if (org != nullptr && org->getX() == -1) {
+		cout << "\n\n\ngetOrganism -1\n\n\n";
+		deleteOrganism(map[y][x]->org, x, y);
+		return nullptr;
+	}
+	else {
+		return org;
+	}
 }
 
-void World::deleteOrganism(Organism* org, short x, short y) {
-
+void World::deleteOrganism(Organism* org, const short& x, const short& y) {
+	if (x == -1) {
+		cout << "\n-1 in delete\n";
+	}
 	if (org != nullptr) {
 		cout << "World::deleteOrganism: " << org->getName();
 		cout << " " << org->getX() << " " << org->getY() << endl;
@@ -199,7 +221,7 @@ void World::deleteOrganism(Organism* org, short x, short y) {
 				}
 			}
 		}
-		else if (!isDeleted) {
+		if (!isDeleted) {
 			short childrenSize = children.size();
 			for (int i = 0; i < childrenSize; i++) {
 				if (children[i] == org) {
@@ -216,7 +238,7 @@ void World::deleteOrganism(Organism* org, short x, short y) {
 	}
 }
 
-void World::replaceOrganism(Organism* org, short x, short y) {
+void World::replaceOrganism(Organism* org, const short& x, const short& y) {
 	map[y][x]->org = org;
 }
 
@@ -231,6 +253,14 @@ short World::getHeight() const {
 void World::takeATurn() {
 	if (isEnd) return;
 	else {
+		ofstream logFile("log.log", ios::app);
+		if (!logFile.is_open()) {
+			std::cout << "\n\n\nNie mozna otworzyc log.log\n\n\n";
+		}
+		else {
+			logFile << "\n\n\n\n\n\n";
+		}
+
 		short childrenSize = children.size();
 		for (int i = 0; i < childrenSize; i++) {
 			if (children[i] != nullptr) {
@@ -248,6 +278,7 @@ void World::takeATurn() {
 		for (int i = 0; i < anSize; i++) {
 			animals[i]->setIsMoved(false);
 			animals[i]->setAge(animals[i]->getAge() + 1);
+			animals[i]->writeToLog();
 			//cout <<"XY: " << animals[i]->getX() << " " << animals[i]->getY() << endl;
 		}
 
@@ -263,10 +294,11 @@ void World::takeATurn() {
 			});
 
 
-		short int plSize = plants.size();
+		short plSize = plants.size();
 		for (int i = 0; i < plSize; i++) {
 			plants[i]->setIsMoved(false);
 			plants[i]->setAge(plants[i]->getAge() + 1);
+			plants[i]->writeToLog();
 		}
 		cout << worldToString();
 
@@ -301,7 +333,7 @@ void World::takeATurn() {
 
 }
 
-void World::addOrganism(Organism* org, short x, short y) {
+void World::addOrganism(Organism* org, const short& x, const short& y) {
 	//cout << "addOrganism size before: " << children.size() << endl;
 	if (dynamic_cast<Animal*>(org)) {
 		map[y][x]->org = org;
@@ -318,7 +350,7 @@ void World::addOrganism(Organism* org, short x, short y) {
 	//cout << "addOrganism size after: " << children.size() << endl;
 }
 
-void World::setOrganism(Organism* plant, short x, short y) {
+void World::setOrganism(Organism* plant, const short& x, const short& y) {
 	if (getOrganism(x, y) == nullptr) {
 		Plant* cast = dynamic_cast<Plant*>(plant);
 		if (dynamic_cast<Grass*>(cast)) {
@@ -344,6 +376,6 @@ void World::setOrganism(Organism* plant, short x, short y) {
 		}
 	}
 	else {
-		cout << "The plant could not be added, the cell is occupied\n";
+		//cout << "The plant could not be added, the cell is occupied\n";
 	}
 }

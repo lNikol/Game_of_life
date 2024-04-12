@@ -9,10 +9,12 @@ Fox::Fox(const short& x, const short& y, World* world) :
 // kiedy lis znajdzie pusta komorke od poczatku to idzie tam
 
 void Fox::action() {
+	short tempX = x, tempY = y;
 	isMoved = true;
 	short width = world->getWidth() - 2;
 	short height = world->getHeight() - 2;
 	cout << "\nFox " << name << " (x,y): " << x << ", " << y << " -> ";
+
 	if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
 		if (y == 1) {
 			if (x == 1) {

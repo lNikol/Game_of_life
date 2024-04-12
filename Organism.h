@@ -30,6 +30,7 @@ public:
 	virtual void deleteOrganism();
 	virtual bool getIsMoved() const = 0;
 	virtual void setIsMoved(bool moved) = 0;
+	virtual void writeToLog();
 	//virtual ~Organism() = 0;
 
 };

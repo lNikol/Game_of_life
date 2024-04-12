@@ -24,11 +24,11 @@ void BarszczSosnowskiego::action() {
 	short width = world->getWidth() - 2;
 	short height = world->getHeight() - 2;
 	vector<Organism*> neighbors;
-	neighbors.push_back(world->getOrganism(x + 1, y));
-	neighbors.push_back(world->getOrganism(x - 1, y));
-	neighbors.push_back(world->getOrganism(x, y + 1));
-	neighbors.push_back(world->getOrganism(x, y - 1));
-	for (int i = 0; i < 4; i++) {
+	neighbors.push_back(world->getOrganism((x + 1), y));
+	neighbors.push_back(world->getOrganism((x - 1), y));
+	neighbors.push_back(world->getOrganism(x, (y + 1)));
+	neighbors.push_back(world->getOrganism(x, (y - 1)));
+	for (int i = 0; i < 4; ++i) {
 		if (neighbors[i] != nullptr && dynamic_cast<Animal*>(neighbors[i])) {
 			cout << "\n" << name << ": Animal " << "(" << neighbors[i]->getName() << ", "
 				<< neighbors[i]->getX() << ", " << neighbors[i]->getY() << ") was killed by me\n";

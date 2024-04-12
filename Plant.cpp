@@ -73,23 +73,23 @@ void Plant::collision(Organism* other) {
 
 void Plant::action() {
 	isMoved = true;
-	cout << "\nAction in plant (" << name << ", " << x << ", " << y << ")\n";
+	//cout << "\nAction in plant (" << name << ", " << x << ", " << y << ")\n";
 
 	random_device rd;
 	mt19937 gen(rd());
 	uniform_int_distribution<> dist(1, 10);
 	short dest = dist(gen);
-	if (dest <= 4) {
+	if (dest <= 3) {
 		short width = world->getWidth() - 2;
 		short height = world->getHeight() - 2;
 		short newX = x;
 		short newY = y;
-		cout << name << " roprzestrzanie " << name << " (x, y) : " << x << ", " << y << endl;
+		//cout << name << " roprzestrzanie " << name << " (x, y) : " << x << ", " << y << endl;
 		if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
 			if (y == 1) {
 				if (x == 1) {
 					uniform_int_distribution<> distr(1, 2);
-					short int destination = distr(gen);
+					short destination = distr(gen);
 					switch (destination) {
 					case 1: { // down
 						newY += 1;
@@ -103,7 +103,7 @@ void Plant::action() {
 				}
 				else if (x == width) {
 					uniform_int_distribution<> distr(1, 2);
-					short int destination = distr(gen);
+					short destination = distr(gen);
 					switch (destination) {
 					case 1: { // down
 						newY += 1;
@@ -117,7 +117,7 @@ void Plant::action() {
 				}
 				else {
 					uniform_int_distribution<> distr(1, 3);
-					short int destination = distr(gen);
+					short destination = distr(gen);
 					switch (destination) {
 					case 1: { // down
 						newY += 1;
@@ -137,7 +137,7 @@ void Plant::action() {
 			else if (y == height) {
 				if (x == 1) {
 					uniform_int_distribution<> distr(1, 2);
-					short int destination = distr(gen);
+					short destination = distr(gen);
 					switch (destination) {
 					case 1: { // top
 						newY -= 1;
@@ -151,7 +151,7 @@ void Plant::action() {
 				}
 				else if (x == width) {
 					uniform_int_distribution<> distr(1, 2);
-					short int destination = distr(gen);
+					short destination = distr(gen);
 					switch (destination) {
 					case 1: { // top
 						newY -= 1;
@@ -165,7 +165,7 @@ void Plant::action() {
 				}
 				else {
 					uniform_int_distribution<> distr(1, 3);
-					short int destination = distr(gen);
+					short destination = distr(gen);
 					switch (destination) {
 					case 1: { // top
 						newY -= 1;
@@ -184,7 +184,7 @@ void Plant::action() {
 			}
 			else if (x == width && (y >= 2 && y < height)) {
 				uniform_int_distribution<> distr(1, 3);
-				short int destination = distr(gen);
+				short destination = distr(gen);
 				switch (destination) {
 				case 1: { // down
 					newY += 1;
@@ -202,7 +202,7 @@ void Plant::action() {
 			}
 			else if (x == 1 && (y >= 2 && y < height)) {
 				uniform_int_distribution<> distr(1, 3);
-				short int destination = distr(gen);
+				short destination = distr(gen);
 				switch (destination) {
 				case 1: { // down
 					newY += 1;
@@ -220,7 +220,7 @@ void Plant::action() {
 			}
 			else {
 				uniform_int_distribution<> distr(1, 4);
-				short int destination = distr(gen);
+				short destination = distr(gen);
 				switch (destination) {
 				case 1: { // down
 					newY += 1;
@@ -244,11 +244,11 @@ void Plant::action() {
 		else {
 			cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
 		}
-		cout << "new x,y: " << newX << ", " << newY << "\n";
+		//cout << "new x,y: " << newX << ", " << newY << "\n";
 		world->setOrganism(this, newX, newY);
 	}
 	else {
-		cout << "Action in (" << name << ", " << x << ", " << y << ") nothing happend\n";
+		//cout << "Action in (" << name << ", " << x << ", " << y << ") nothing happend\n";
 	}
 
 
