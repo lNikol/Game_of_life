@@ -118,13 +118,11 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 				if (world->getOrganism(x + 1, y) == nullptr) {
 					// jako opcja zamienić te dwie linijki na funkcję
 					// world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1 , y);
-					Organism* child = createAnimalWithType(other, x + 1, y);
-					world->addOrganism(child, x + 1, y);
+					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
 					return true;
 				}
 				else if (world->getOrganism(x, y + 1) == nullptr) {
-					Organism* child = createAnimalWithType(other, x, y + 1);
-					world->addOrganism(child, x, y + 1);
+					world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
 					return true;
 				}
 				else {
@@ -134,13 +132,11 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 			}
 			else if (x == width) {
 				if (world->getOrganism(x - 1, y) == nullptr) {
-					Organism* child = createAnimalWithType(other, x - 1, y);
-					world->addOrganism(child, x - 1, y);
+					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
 					return true;
 				}
 				else if (world->getOrganism(x, y + 1) == nullptr) {
-					Organism* child = createAnimalWithType(other, x, y + 1);
-					world->addOrganism(child, x, y + 1);
+					world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
 					return true;
 				}
 				else {
@@ -150,18 +146,15 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 			}
 			else {
 				if (world->getOrganism(x - 1, y) == nullptr) {
-					Organism* child = createAnimalWithType(other, x - 1, y);
-					world->addOrganism(child, x - 1, y);
+					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
 					return true;
 				}
 				else if (world->getOrganism(x + 1, y) == nullptr) {
-					Organism* child = createAnimalWithType(other, x + 1, y);
-					world->addOrganism(child, x + 1, y);
+					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
 					return true;
 				}
 				else if (world->getOrganism(x, y + 1) == nullptr) {
-					Organism* child = createAnimalWithType(other, x, y + 1);
-					world->addOrganism(child, x, y + 1);
+					world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
 					return true;
 				}
 				else {
@@ -173,13 +166,11 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 		else if (y == height) {
 			if (x == 1) {
 				if (world->getOrganism(x + 1, y) == nullptr) {
-					Organism* child = createAnimalWithType(other, x + 1, y);
-					world->addOrganism(child, x + 1, y);
+					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
 					return true;
 				}
 				else if (world->getOrganism(x, y - 1) == nullptr) {
-					Organism* child = createAnimalWithType(other, x, y - 1);
-					world->addOrganism(child, x, y - 1);
+					world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
 					return true;
 				}
 				else {
@@ -189,13 +180,11 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 			}
 			else if (x == width) {
 				if (world->getOrganism(x, y - 1) == nullptr) {
-					Organism* child = createAnimalWithType(other, x, y - 1);
-					world->addOrganism(child, x, y - 1);
+					world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
 					return true;
 				}
 				else if (world->getOrganism(x - 1, y) == nullptr) {
-					Organism* child = createAnimalWithType(other, x - 1, y);
-					world->addOrganism(child, x - 1, y);
+					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
 					return true;
 				}
 				else {
@@ -205,18 +194,15 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 			}
 			else {
 				if (world->getOrganism(x - 1, y) == nullptr) {
-					Organism* child = createAnimalWithType(other, x - 1, y);
-					world->addOrganism(child, x - 1, y);
+					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
 					return true;
 				}
 				else if (world->getOrganism(x + 1, y) == nullptr) {
-					Organism* child = createAnimalWithType(other, x + 1, y);
-					world->addOrganism(child, x + 1, y);
+					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
 					return true;
 				}
 				else if (world->getOrganism(x, y - 1) == nullptr) {
-					Organism* child = createAnimalWithType(other, x, y - 1);
-					world->addOrganism(child, x, y - 1);
+					world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
 					return true;
 				}
 				else {
@@ -227,18 +213,15 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 		}
 		else if (x == width && (y >= 2 && y < height)) {
 			if (world->getOrganism(x - 1, y) == nullptr) {
-				Organism* child = createAnimalWithType(other, x - 1, y);
-				world->addOrganism(child, x - 1, y);
+				world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
 				return true;
 			}
 			else if (world->getOrganism(x, y - 1) == nullptr) {
-				Organism* child = createAnimalWithType(other, x, y - 1);
-				world->addOrganism(child, x, y - 1);
+				world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
 				return true;
 			}
 			else if (world->getOrganism(x, y + 1) == nullptr) {
-				Organism* child = createAnimalWithType(other, x, y + 1);
-				world->addOrganism(child, x, y + 1);
+				world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
 				return true;
 			}
 			else {
@@ -248,18 +231,15 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 		}
 		else if (x == 1 && (y >= 2 && y < height)) {
 			if (world->getOrganism(x + 1, y) == nullptr) {
-				Organism* child = createAnimalWithType(other, x + 1, y);
-				world->addOrganism(child, x + 1, y);
+				world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
 				return true;
 			}
 			else if (world->getOrganism(x, y - 1) == nullptr) {
-				Organism* child = createAnimalWithType(other, x, y - 1);
-				world->addOrganism(child, x, y - 1);
+				world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
 				return true;
 			}
 			else if (world->getOrganism(x, y + 1) == nullptr) {
-				Organism* child = createAnimalWithType(other, x, y + 1);
-				world->addOrganism(child, x, y + 1);
+				world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
 				return true;
 			}
 			else {
@@ -269,23 +249,19 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 		}
 		else {
 			if (world->getOrganism(x - 1, y) == nullptr) {
-				Organism* child = createAnimalWithType(other, x - 1, y);
-				world->addOrganism(child, x - 1, y);
+				world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
 				return true;
 			}
 			else if (world->getOrganism(x, y - 1) == nullptr) {
-				Organism* child = createAnimalWithType(other, x, y - 1);
-				world->addOrganism(child, x, y - 1);
+				world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
 				return true;
 			}
 			else if (world->getOrganism(x, y + 1) == nullptr) {
-				Organism* child = createAnimalWithType(other, x, y + 1);
-				world->addOrganism(child, x, y + 1);
+				world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
 				return true;
 			}
 			else if (world->getOrganism(x + 1, y) == nullptr) {
-				Organism* child = createAnimalWithType(other, x + 1, y);
-				world->addOrganism(child, x + 1, y);
+				world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
 				return true;
 			}
 			else {

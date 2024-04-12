@@ -6,6 +6,7 @@ private:
 	short counterAfterAbility = 0;
 	bool isAbilityOn = false; 
 	bool isAlive = true;
+	bool isAbilityKeyOn = false;
 public:
 	Human(const short& x, const short& y, World* world);
 	void setIsAlive(bool alive);

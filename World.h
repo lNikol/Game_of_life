@@ -10,7 +10,7 @@ class World {
 protected:
 	short width = 0, height = 0;
 	std::vector<Organism*> plants;
-	std::vector < std::vector<Cell*>> map;
+	std::vector<std::vector<Cell*>> map;
 	std::vector<Organism*> animals;
 	std::vector<Organism*> children;
 	std::string w_string;
