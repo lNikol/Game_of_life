@@ -6,14 +6,13 @@
 
 class Animal : public Organism {
 protected:
-	short oldX = -1, oldY = -1;
+	short oldX = -1, oldY = -1, age = -1;
 public:
 	Animal(const std::string& ikona, const std::string& name, const short& power, const short& initiative,
 		const short& age, const short& x, const short& y, World* world);
 	void action() override;
 	virtual void move(); // 0
 	void collision(Organism* org) override;
-	void drawOrganism() const override;
 	std::string getName() const override;
 	short getX() const override;
 	short getY() const override;
@@ -21,10 +20,10 @@ public:
 	short getOldY() const;
 	short getPower() const override;
 	short getInitiative() const override;
-	short getAge() const override;
+	short getAge() const;
 	bool getIsMoved() const override;
 	void setIsMoved(bool moved);
-	void setAge(const short& a) override;
+	void setAge(const short& a);
 	void setPower(const short& pow);
 	World* getWorld() const override;
 	void setPosition(const short& x, const short& y) override;

@@ -11,7 +11,7 @@ using namespace std;
 
 Animal::Animal(const string& ikona, const string& name, const short& power, const short& initiative,
 	const short& age, const short& x, const short& y, World* world) :
-	Organism(ikona, name, power, initiative, age, x, y, world), oldX(x), oldY(y) {
+	Organism(ikona, name, power, initiative, x, y, world), age(age), oldX(x), oldY(y) {
 }
 
 Organism* Animal::createAnimalWithType(Organism* animal, const short& x, const short& y) {
@@ -32,7 +32,7 @@ Organism* Animal::createAnimalWithType(Organism* animal, const short& x, const s
 		return new Wolf(x, y, animal->getWorld());
 	}
 	else {
-		cout << "\nThe absence of this type of animal or the organism is not an animal\n";
+		//cout << "\nThe absence of this type of animal or the organism is not an animal\n";
 		return nullptr;
 	}
 }
@@ -98,10 +98,6 @@ void Animal::setPosition(const short& xx, const short& yy) {
 	y = yy;
 }
 
-void Animal::drawOrganism() const {
-	cout << "Animal\n";
-}
-
 bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 	short width = world->getWidth() - 2;
 	short height = world->getHeight() - 2;
@@ -121,7 +117,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl;
+					//cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -135,7 +131,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl;
+					//cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -153,7 +149,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl;
+					//cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -169,7 +165,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl;
+					//cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -183,7 +179,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl;
+					//cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -201,7 +197,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 					return true;
 				}
 				else {
-					cout << "There are no empty cells around " << name << endl;
+				//	cout << "There are no empty cells around " << name << endl;
 					return false;
 				}
 			}
@@ -220,7 +216,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 				return true;
 			}
 			else {
-				cout << "There are no empty cells around " << name << endl;
+				//cout << "There are no empty cells around " << name << endl;
 				return false;
 			}
 		}
@@ -238,7 +234,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 				return true;
 			}
 			else {
-				cout << "There are no empty cells around " << name << endl;
+				//cout << "There are no empty cells around " << name << endl;
 				return false;
 			}
 		}
@@ -260,7 +256,7 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 				return true;
 			}
 			else {
-				cout << "There are no empty cells around " << name << endl;
+				//cout << "There are no empty cells around " << name << endl;
 				return false;
 			}
 		}
@@ -280,7 +276,7 @@ void Animal::move() {
 	oldY = y;
 	short width = world->getWidth() - 2;
 	short height = world->getHeight() - 2;
-	cout << "\nanimal " << name << " (x,y): " << x << ", " << y << " -> ";
+	cout << "\nAnimal (" << name << ") (x,y): " << x << ", " << y << " -> ";
 	if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
 		if (y == 1) {
 			if (x == 1) {
@@ -438,7 +434,7 @@ void Animal::move() {
 		}
 	}
 	else {
-		cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
+		//cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
 	}
 	
 
@@ -452,10 +448,7 @@ void Animal::action() {
 }
 
 void Animal::collision(Organism* other) {
-	if (other != nullptr) cout << "animal::collision: " << other->getName() << " " << other->getX() << " " << other->getY() << endl;
-	//dodac warunki jesli organism == nullptr
 	if (dynamic_cast<Animal*>(other)) {
-		// moga byc problemy podczas usuwania organizmu
 		if (checkType(this, dynamic_cast<Animal*>(other))) {
 			if (reproduction(this, oldX, oldY) == false) {
 				if (reproduction(dynamic_cast<Animal*>(other), other->getX(), other->getY()) == false) {
@@ -474,22 +467,12 @@ void Animal::collision(Organism* other) {
 		}
 		else {
 			short otherPower = other->getPower();
-			//cout << "otherPower: " << otherPower << " " << other->getX() << " " << other->getY() << endl;
 			if (otherPower == -1) {
 				world->replaceOrganism(this, x, y);
 				world->deleteOrganism(other, oldX, oldY);
 			}
 			else {
-				if (dynamic_cast<Turtle*>(other)) {
-					//	Zapytać: zamienić
-					// Przykładowo błędem będzie zaimplementowanie w metodzie kolizja() klasy Zwierze
-					// sprawdzania czy organizm z którym zderzył się organizm atakujący jest klasy Zolw, a
-					// następnie porównywanie siły i pozostawanie na tym samym polu jeśli jest to konieczne.
-
-
-					other->collision(this);
-				}
-				else if (dynamic_cast<Antelope*>(other)) {
+				if (dynamic_cast<Antelope*>(other)) {
 					other->collision(this);
 					if (other->getX() == -1) {
 						world->replaceOrganism(this, x, y);
@@ -497,21 +480,30 @@ void Animal::collision(Organism* other) {
 					}
 				}
 				else {
-					if (power >= otherPower) {
-						/*cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
-							<< other->getX() << ", " << other->getY() << ") end go to the position (" << x << ", " << y << ")\n";
-						*/world->deleteOrganism(other, other->getX(), other->getY());
-						world->replaceOrganism(this, x, y);
-						world->deleteOrganism(nullptr , oldX, oldY);
-
-						oldX = x;
-						oldY = y;
+					Animal* oth = dynamic_cast<Animal*>(other);
+					if (oth->reboundAttack(this)) {
+						//usuwam napastnika
+						//cout << "\n\nThe attack was rebounded\n\n";
+						world->deleteOrganism(this, oldX, oldY);
 					}
 					else {
-						/*cout << "I (" << name << ", " << x << ", " << y << ") was killed by (" << other->getName()
-							<< ", " << other->getX() << ", " << other->getY() << ") clear map by my old position\n";
-						*/world->deleteOrganism(this, oldX, oldY);
+						if (power >= otherPower) {
+							/*cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
+								<< other->getX() << ", " << other->getY() << ") end go to the position (" << x << ", " << y << ")\n";
+							*/world->deleteOrganism(oth, oth->getX(), oth->getY());
+							world->replaceOrganism(this, x, y);
+							world->deleteOrganism(nullptr, oldX, oldY);
+
+							oldX = x;
+							oldY = y;
+						}
+						else {
+							/*cout << "I (" << name << ", " << x << ", " << y << ") was killed by (" << other->getName()
+								<< ", " << other->getX() << ", " << other->getY() << ") clear map by my old position\n";
+							*/world->deleteOrganism(this, oldX, oldY);
+						}
 					}
+					
 				}
 			}
 		}
@@ -536,10 +528,11 @@ void Animal::collision(Organism* other) {
 void Animal::deleteOrganism() {
 	oldX = -1;
 	oldY = -1;
+	age = -1;
 	Organism::deleteOrganism();
 }
 
 
 Animal::~Animal() {
-	cout << "~Animal " << this << endl;
+	//cout << "~Animal " << this << endl;
 }

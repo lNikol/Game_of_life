@@ -38,7 +38,7 @@ void Antelope::collision(Organism* org) {
 	short height = world->getHeight() - 2;
 	if (org != nullptr) {
 		if (destination == 2 && dynamic_cast<Animal*>(org)) {
-			cout << "Maybe there won't be a battle for " << name << endl;
+			//cout << "Maybe there won't be a battle for " << name << endl;
 			// nie bedzie walki
 			if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
 				if (y == 1) {
@@ -52,7 +52,7 @@ void Antelope::collision(Organism* org) {
 							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
-							cout << "There are no empty space around " << name << ", there will be a fight\n";
+							//cout << "There are no empty space around " << name << ", there will be a fight\n";
 							Animal::collision(org);
 						}
 					}
@@ -66,7 +66,7 @@ void Antelope::collision(Organism* org) {
 							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
-							cout << "There are no empty space around " << name << ", there will be a fight\n";
+							//cout << "There are no empty space around " << name << ", there will be a fight\n";
 							Animal::collision(org);
 						}
 					}
@@ -84,7 +84,7 @@ void Antelope::collision(Organism* org) {
 							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
-							cout << "There are no empty space around " << name << ", there will be a fight\n";
+							//cout << "There are no empty space around " << name << ", there will be a fight\n";
 							Animal::collision(org);
 						}
 					}
@@ -100,7 +100,7 @@ void Antelope::collision(Organism* org) {
 							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
-							cout << "There are no empty space around " << name << ", there will be a fight\n";
+							//cout << "There are no empty space around " << name << ", there will be a fight\n";
 							Animal::collision(org);
 						}
 					}
@@ -114,7 +114,7 @@ void Antelope::collision(Organism* org) {
 							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
-							cout << "There are no empty space around " << name << ", there will be a fight\n";
+							//cout << "There are no empty space around " << name << ", there will be a fight\n";
 							Animal::collision(org);
 						}
 					}
@@ -132,7 +132,7 @@ void Antelope::collision(Organism* org) {
 							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
-							cout << "There are no empty space around " << name << ", there will be a fight\n";
+							//cout << "There are no empty space around " << name << ", there will be a fight\n";
 							Animal::collision(org);
 						}
 					}
@@ -151,7 +151,7 @@ void Antelope::collision(Organism* org) {
 						Animal::collision(world->getOrganism(x, y));
 					}
 					else {
-						cout << "There are no empty space around " << name << ", there will be a fight\n";
+						//cout << "There are no empty space around " << name << ", there will be a fight\n";
 						Animal::collision(org);
 					}
 				}
@@ -169,7 +169,7 @@ void Antelope::collision(Organism* org) {
 						Animal::collision(world->getOrganism(x, y));
 					}
 					else {
-						cout << "There are no empty space around " << name << ", there will be a fight\n";
+						//cout << "There are no empty space around " << name << ", there will be a fight\n";
 						Animal::collision(org);
 					}
 				}
@@ -191,19 +191,19 @@ void Antelope::collision(Organism* org) {
 						Animal::collision(world->getOrganism(x, y));
 					}
 					else {
-						cout << "There are no empty space around " << name << ", there will be a fight\n";
+						//cout << "There are no empty space around " << name << ", there will be a fight\n";
 						Animal::collision(org);
 					}
 				}
 			}
 			else {
-				cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
+				//cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
 			}
 			cout << "" << x << ", " << y << "\n";
 		}
 		else {
 			// bedzie walka
-			cout << "Failed to escape from battle for a " << name << endl;
+			//cout << "Failed to escape from battle for a " << name << endl;
 			Animal::collision(org);
 		}
 	}

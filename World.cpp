@@ -12,6 +12,8 @@
 #include "Human.h"
 #include <iostream>
 #include <fstream>
+#include <Windows.h>
+#include <stdlib.h> 
 using namespace std;
 
 //Przy uruchomieniu programu na planszy powinno się
@@ -39,23 +41,25 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 				map[i][j]->symbol = "|";
 			}
 			if (i == 0 && j == 0) {
-				map[i][j]->symbol = "┌"; // naprawic nie dziala char symbol
+				map[i][j]->symbol = "\332"; // naprawic nie dziala char symbol
 			}
 			if (i == height - 1 && j == width - 1) {
-				map[i][j]->symbol = "┘";
+				map[i][j]->symbol = "\331";
 			}
 			if (j == width - 1 && i == 0) {
-				map[i][j]->symbol = "┐";
+				map[i][j]->symbol = "\277";
 			}
 			else if (j == 0 && i == height - 1) {
-				map[i][j]->symbol = "└";
+				map[i][j]->symbol = "\300";
 			}			
 		}
 	}
+
 	pair<short, short> randPos = randomPos();
 	Human* human = new Human(1, 1, this);
 	animals.push_back(human);
 	map[human->getY()][human->getX()]->org = human;
+
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
@@ -114,19 +118,16 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}
 		}
 	}
-	//std::pair<short, short> randPos = randomPos();
-	//map[1][1]->org = new Fox(1, 1, this);
-	//animals.push_back(map[1][1]->org);
-	//randPos = randomPos();
-	//map[1][2]->org = new Fox(2, 1, this);
-	//animals.push_back(map[1][2]->org);
-	//map[2][1]->org = new Fox(1, 2, this);
-	//animals.push_back(map[2][1]->org);
 }
 
 void World::drawWorld() {
 	// zrobic oczyszczenie mapy kiedy ktos pochodzi
+	Sleep(350);
+	system("cls");
 	cout << "Author: Nikolai Lavrinov 201302\n";
+	cout << "Press o to active the skill\n";
+	cout << "A - Antelope, F - Fox, W - Wolf\nH - Human, S - Sheep, T - Turtle\n";
+	cout << "B - Barszcz, g - Grass, G - Guarana\nM - Mlecz, J - WilczeJagody\n\n";
 	cout << worldToString();
 }
 
@@ -140,11 +141,10 @@ string World::worldToString() {
 		for (int j = 0; j < width; j++) {
 			string symbol = map[i][j]->symbol;
 			if (symbol == "") {
-				// karta nie usuwa symbol czlowieka, zobaczyc dlaczego
 				auto org = getOrganism(j, i);
 				if (org != nullptr) {
 					// zamienić na metodę drawOrganism()
-					symbol = org->getIkona();
+					symbol = org->drawOrganism();
 				}
 				else {
 					symbol = ".";
@@ -157,7 +157,6 @@ string World::worldToString() {
 	w_string += '\n';
 	return w_string;
 }
-
 
 pair<short, short> World::randomPos() {
 	srand(time(NULL));
@@ -178,7 +177,6 @@ Organism* World::getOrganism(const short& x, const short& y) {
 	}
 	Organism* org = map[y][x]->org;
 	if (org != nullptr && org->getX() == -1) {
-		cout << "\n\n\ngetOrganism -1\n\n\n";
 		deleteOrganism(map[y][x]->org, x, y);
 		return nullptr;
 	}
@@ -188,12 +186,9 @@ Organism* World::getOrganism(const short& x, const short& y) {
 }
 
 void World::deleteOrganism(Organism* org, const short& x, const short& y) {
-	if (x == -1) {
-		cout << "\n-1 in delete\n";
-	}
 	if (org != nullptr) {
-		cout << "World::deleteOrganism: " << org->getName();
-		cout << " " << org->getX() << " " << org->getY() << endl;
+		//cout << "World::deleteOrganism: " << org->getName();
+		//cout << " " << org->getX() << " " << org->getY() << endl;
 		map[y][x]->org = nullptr;
 		map[y][x]->symbol = "";
 		bool isDeleted = false;
@@ -240,7 +235,6 @@ void World::deleteOrganism(Organism* org, const short& x, const short& y) {
 
 void World::replaceOrganism(Organism* org, const short& x, const short& y) {
 	if (x == -1) {
-		cout << "-1 in replace\n";
 		return;
 	}
 	map[y][x]->org = org;
@@ -281,16 +275,16 @@ void World::takeATurn() {
 		short anSize = animals.size();
 		for (int i = 0; i < anSize; i++) {
 			animals[i]->setIsMoved(false);
-			animals[i]->setAge(animals[i]->getAge() + 1);
+			dynamic_cast<Animal*>(animals[i])->setAge(dynamic_cast<Animal*>(animals[i])->getAge() + 1);
 			animals[i]->writeToLog();
 			//cout <<"XY: " << animals[i]->getX() << " " << animals[i]->getY() << endl;
 		}
 
 		// sortowanie po inicjatywie i wieku
 		sort(animals.begin(), animals.end(),
-			[](const Organism* a, const Organism* b) {
+			[](Organism* a, Organism* b) {
 				if (a->getInitiative() == b->getInitiative()) {
-					return a->getAge() > b->getAge();
+					return (dynamic_cast<Animal*>(a)->getAge() > dynamic_cast<Animal*>(b)->getAge());
 				}
 				else {
 					return a->getInitiative() > b->getInitiative();
@@ -301,22 +295,17 @@ void World::takeATurn() {
 		short plSize = plants.size();
 		for (int i = 0; i < plSize; i++) {
 			plants[i]->setIsMoved(false);
-			plants[i]->setAge(plants[i]->getAge() + 1);
 			plants[i]->writeToLog();
 		}
-		cout << worldToString();
 
 
 		for (auto* animal : animals) {
 			if (dynamic_cast<Animal*>(animal) != nullptr) {
-				cout << "auto XY: " << animal->getX() << " " << animal->getY() << " " << animal->getName() << endl;
 				if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
 					animal->action();
-					cout << worldToString();
+					drawWorld();
 				}
 				if (animal->getX() == -1) {
-					cout << "\n\n-------  " << animal->getName() << "  ------------------------------- MINUS JEDEN ---------------------------------------\n\n";
-					cout << endl;
 					break;
 				}
 			}
@@ -327,32 +316,25 @@ void World::takeATurn() {
 				plant->action();
 			}
 			if (plant->getX() == -1) {
-				cout << "\n\n-------  " << plant->getName() << "  ------------------------------- MINUS KWIAT ---------------------------------------\n\n";
-				cout << endl;
 				break;
 			}
 		}
-		cout << worldToString();
+		drawWorld();
 	}
-	
-
 }
 
 void World::addOrganism(Organism* org, const short& x, const short& y) {
-	//cout << "addOrganism size before: " << children.size() << endl;
 	if (dynamic_cast<Animal*>(org)) {
 		map[y][x]->org = org;
 		children.push_back(org);
-		//cout << "add organism: " << org << endl;
 	}
 	else if (dynamic_cast<Plant*>(org)) {
 		map[y][x]->org = org;
 		children.push_back(org);
 	}
 	else if (org == nullptr) {
-		cout << "It is not possible to add an organism\n";
+		//cout << "It is not possible to add an organism\n";
 	}
-	//cout << "addOrganism size after: " << children.size() << endl;
 }
 
 void World::setOrganism(Organism* plant, const short& x, const short& y) {
@@ -374,7 +356,7 @@ void World::setOrganism(Organism* plant, const short& x, const short& y) {
 			map[y][x]->org = new BarszczSosnowskiego(x, y, this);
 		}
 		else {
-			cout << "\nbrak tego gotunku czy inny błąd\n";
+			//cout << "\nbrak tego gotunku czy inny błąd\n";
 		}
 		if (map[y][x]->org != nullptr) {
 			children.push_back(map[y][x]->org);

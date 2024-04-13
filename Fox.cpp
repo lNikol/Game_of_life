@@ -38,7 +38,7 @@ void Fox::action() {
 						collision(world->getOrganism(x, y));
 					}
 					else {
-						cout << "There are strong organisms around the fox, the fox stays in place\n";
+						// cout << "There are strong organisms around the fox, the fox stays in place\n";
 					}
 				}
 			}
@@ -63,7 +63,7 @@ void Fox::action() {
 						collision(world->getOrganism(x, y));
 					}
 					else {
-						cout << "There are strong organisms around the fox, the fox stays in place\n";
+						// cout << "There are strong organisms around the fox, the fox stays in place\n";
 					}
 				}
 			}
@@ -97,7 +97,7 @@ void Fox::action() {
 						collision(world->getOrganism(x, y));
 					}
 					else {
-						cout << "There are strong organisms around the fox, the fox stays in place\n";
+						// cout << "There are strong organisms around the fox, the fox stays in place\n";
 					}
 				}
 			}
@@ -124,7 +124,7 @@ void Fox::action() {
 						collision(world->getOrganism(x, y));
 					}
 					else {
-						cout << "There are strong organisms around the fox, the fox stays in place\n";
+						// cout << "There are strong organisms around the fox, the fox stays in place\n";
 					}
 				}
 			}
@@ -149,7 +149,7 @@ void Fox::action() {
 						collision(world->getOrganism(x, y));
 					}
 					else {
-						cout << "There are strong organisms around the fox, the fox stays in place\n";
+						// cout << "There are strong organisms around the fox, the fox stays in place\n";
 					}
 				}
 			}
@@ -183,7 +183,7 @@ void Fox::action() {
 						collision(world->getOrganism(x, y));
 					}
 					else {
-						cout << "There are strong organisms around the fox, the fox stays in place\n";
+						// cout << "There are strong organisms around the fox, the fox stays in place\n";
 					}
 				}
 			}
@@ -218,7 +218,7 @@ void Fox::action() {
 					collision(world->getOrganism(x, y));
 				}
 				else {
-					cout << "There are strong organisms around the fox, the fox stays in place\n";
+					// cout << "There are strong organisms around the fox, the fox stays in place\n";
 				}
 			}
 		}
@@ -252,7 +252,7 @@ void Fox::action() {
 					collision(world->getOrganism(x, y));
 				}
 				else {
-					cout << "There are strong organisms around the fox, the fox stays in place\n";
+					// cout << "There are strong organisms around the fox, the fox stays in place\n";
 				}
 			}
 		}
@@ -295,13 +295,13 @@ void Fox::action() {
 					collision(world->getOrganism(x, y));
 				}
 				else {
-					cout << "There are strong organisms around the fox, the fox stays in place\n";
+					// cout << "There are strong organisms around the fox, the fox stays in place\n";
 				}
 			}
 		}
 	}
 	else {
-		cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
+		//cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
 	}
 	cout << "" << x << ", " << y << "\n";
 }

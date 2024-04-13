@@ -2,9 +2,9 @@
 #include <iostream>
 using namespace std;
 
-Plant::Plant(const string& ikona, const string& name, const short& power, const short& initiative,
-	const short& age, const short& x, const short& y, World* world) :
-	Organism(ikona, name, power, initiative, age, x, y, world) {
+Plant::Plant(const string& ikona, const string& name, const short& power, 
+	const short& initiative, const short& x, const short& y, World* world) :
+	Organism(ikona, name, power, initiative, x, y, world) {
 
 }
 
@@ -32,14 +32,6 @@ short Plant::getInitiative() const {
 	return initiative;
 }
 
-short Plant::getAge() const {
-	return age;
-}
-
-void Plant::setAge(const short& a) {
-	age = a;
-}
-
 void Plant::setPosition(const short& xx, const short& yy) {
 	x = xx;
 	y = yy;
@@ -54,14 +46,10 @@ bool Plant::getIsMoved() const {
 	return isMoved;
 }
 
-void Plant::drawOrganism() const {
-	cout << "Plant:" << name << "\n";
-}
-
 void Plant::collision(Organism* other) {
 	auto cost = dynamic_cast<Animal*>(other);
-	cout << "\nAnimal " << "(" << cost->getName() << ", " << cost->getX() << ", " << cost->getY() << ")"
-		<< " ate me (" << name << ", " << x << ", " << y << ") and nothing happend\n";
+	//cout << "\nAnimal " << "(" << cost->getName() << ", " << cost->getX() << ", " << cost->getY() << ")"
+		//<< " ate me (" << name << ", " << x << ", " << y << ") and nothing happend\n";
 	world->deleteOrganism(this, x, y);
 	world->replaceOrganism(cost, cost->getX(), cost->getY());
 	world->replaceOrganism(nullptr, cost->getOldX(), cost->getOldY());
@@ -238,7 +226,7 @@ void Plant::action() {
 			}
 		}
 		else {
-			cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
+			//cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
 		}
 		//cout << "new x,y: " << newX << ", " << newY << "\n";
 		world->setOrganism(this, newX, newY);
@@ -252,5 +240,5 @@ void Plant::action() {
 }
 
 Plant::~Plant() {
-	cout << "~Plant......\n";
+	//cout << "~Plant......\n";
 }

@@ -2,19 +2,19 @@
 #include <vector>
 using namespace std;
 BarszczSosnowskiego::BarszczSosnowskiego(const short& x, const short& y, World* world) :
-	Plant("B", "Barszcz", 10, 0, 0, x, y, world) {
+	Plant("B", "Barszcz", 10, 0, x, y, world) {
 
 	cout << "BarszczSosnowskiego (" << name << ", " << x << ", " << y << ") was created\n";
 }
 
 void BarszczSosnowskiego::collision(Organism* org) {
 	auto cost = dynamic_cast<Animal*>(org);
-	cout << "Animal " << "(" << cost->getName() << ", " << cost->getX() << ", " << cost->getY() << ")"
-		<< " ate me (" << name << ", " << x << ", " << y << ") and was killed by me\n";
-	cout << "cost->name() cost->getOldX(), cost->getOldY(): "
-		<< cost->getName() << " " << cost->getOldX() << " " << cost->getOldY() << endl;
+	//cout << "Animal " << "(" << cost->getName() << ", " << cost->getX() << ", " << cost->getY() << ")"
+		//<< " ate me (" << name << ", " << x << ", " << y << ") and was killed by me\n";
+	//cout << "cost->name() cost->getOldX(), cost->getOldY(): "
+		//<< cost->getName() << " " << cost->getOldX() << " " << cost->getOldY() << endl;
 	world->deleteOrganism(cost, cost->getOldX(), cost->getOldY());
-	cout << "this, x, y: " << name << " " << x << " " << y << endl;
+	//cout << "this, x, y: " << name << " " << x << " " << y << endl;
 	world->deleteOrganism(this, x, y);
 }
 
@@ -35,5 +35,4 @@ void BarszczSosnowskiego::action() {
 			world->deleteOrganism(neighbors[i], neighbors[i]->getX(), neighbors[i]->getY());
 		}
 	}
-	cout << "\n" << name << ": end\n";
 };

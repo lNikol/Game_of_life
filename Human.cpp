@@ -39,7 +39,6 @@ void Human::action() {
 		//333 w prawo
 		if (key == 224) {  // Sprawdzenie czy klawisz specjalny
 			key = _getch();  // Pobranie rzeczywistego kodu klawisza
-			cout << "sKod klawisza: " << key + 256 << endl;  // Dodanie 256, aby otrzymać kod > 255
 			key += 256;
 			switch (key) {
 			case 328: {
