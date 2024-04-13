@@ -79,7 +79,7 @@ void Plant::action() {
 	mt19937 gen(rd());
 	uniform_int_distribution<> dist(1, 10);
 	short dest = dist(gen);
-	if (dest <= 3) {
+	if (dest <= 2) {
 		short width = world->getWidth() - 2;
 		short height = world->getHeight() - 2;
 		short newX = x;

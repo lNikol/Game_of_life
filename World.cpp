@@ -52,10 +52,10 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}			
 		}
 	}
-	//pair<short, short> randPos = randomPos();
-	//Human* human = new Human(randPos.first, randPos.second, this);
-	//animals.push_back(human);
-	//map[human->getY()][human->getX()]->org = human;
+	pair<short, short> randPos = randomPos();
+	Human* human = new Human(1, 1, this);
+	animals.push_back(human);
+	map[human->getY()][human->getX()]->org = human;
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
@@ -239,6 +239,10 @@ void World::deleteOrganism(Organism* org, const short& x, const short& y) {
 }
 
 void World::replaceOrganism(Organism* org, const short& x, const short& y) {
+	if (x == -1) {
+		cout << "-1 in replace\n";
+		return;
+	}
 	map[y][x]->org = org;
 }
 
@@ -308,6 +312,7 @@ void World::takeATurn() {
 				cout << "auto XY: " << animal->getX() << " " << animal->getY() << " " << animal->getName() << endl;
 				if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
 					animal->action();
+					cout << worldToString();
 				}
 				if (animal->getX() == -1) {
 					cout << "\n\n-------  " << animal->getName() << "  ------------------------------- MINUS JEDEN ---------------------------------------\n\n";

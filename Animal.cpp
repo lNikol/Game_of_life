@@ -492,10 +492,10 @@ void Animal::collision(Organism* other) {
 				}
 				else if (dynamic_cast<Antelope*>(other)) {
 					other->collision(this);
-					/*if (other->getX() == -1) {
+					if (other->getX() == -1) {
 						world->replaceOrganism(this, x, y);
 						world->deleteOrganism(nullptr, oldX, oldY);
-					}*/
+					}
 				}
 				else {
 					if (power >= otherPower) {

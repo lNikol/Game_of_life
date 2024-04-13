@@ -18,7 +18,7 @@ int main()
 	//	cin >> N >> M;
 	//}
 
-	World game(10, 10);
+	World game(15, 15);
 
 	while(!game.getIsEnd()){
 		game.takeATurn();

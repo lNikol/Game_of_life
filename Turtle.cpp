@@ -6,10 +6,8 @@ Turtle::Turtle(const short& x, const short& y, World* world) :
 }
 
 void Turtle::action() {
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_int_distribution<> distr(1, 4);
-	short destination = distr(gen);
+	srand(time(NULL));
+	short destination = rand() % 4 + 1;
 	if (destination == 4) {
 		Animal::move();
 		collision(world->getOrganism(x, y));
@@ -79,5 +77,12 @@ void Turtle::collision(Organism* org) {
 	}
 	else if (dynamic_cast<Plant*>(org)) {
 		Animal::collision(org);
+	}
+	else {
+		// sa problemy podczas usuwania organizmu
+		world->replaceOrganism(this, x, y);
+		world->deleteOrganism(nullptr, oldX, oldY);
+		oldX = x;
+		oldY = y;
 	}
 }

@@ -12,7 +12,14 @@ void Antelope::action() {
 void Antelope::move() {
 	isMoved = true;
 	for (int i = 0; i < 2; i++) {
-		Animal::move();
+		if (x != -1) {
+			Animal::move();
+			collision(world->getOrganism(x, y));
+		}
+		
+		//world->deleteOrganism(nullptr, oldX, oldY);
+		//world->replaceOrganism(this, x, y);
+
 	}
 }
 
