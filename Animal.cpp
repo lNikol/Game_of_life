@@ -93,11 +93,7 @@ void Animal::setIsMoved(bool moved) {
 	isMoved = moved;
 }
 
-std::pair<const short, const short> Animal::getPosition() const {
-	return std::make_pair<const short&, const short&>(x, y);
-}
-
-void Animal::setPosition(const short xx, const short yy) {
+void Animal::setPosition(const short& xx, const short& yy) {
 	x = xx;
 	y = yy;
 }
@@ -105,7 +101,6 @@ void Animal::setPosition(const short xx, const short yy) {
 void Animal::drawOrganism() const {
 	cout << "Animal\n";
 }
-
 
 bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 	short width = world->getWidth() - 2;
@@ -271,6 +266,10 @@ bool Animal::reproduction(Animal* other, const short& x, const short& y) {
 		}
 		return false;
 	}
+	return false;
+}
+
+bool Animal::reboundAttack(Organism* org) {
 	return false;
 }
 

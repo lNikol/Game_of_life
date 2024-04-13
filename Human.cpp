@@ -13,14 +13,6 @@ void Human::ability() {
 	cout << "Human ability\n";
 }
 
-void Human::setIsAlive(bool alive) {
-	isAlive = alive;
-}
-
-bool Human::getIsAlive() {
-	return isAlive;
-}
-
 void Human::action() {
 	srand(time(NULL));
 	// zastanowic sie jak lepiej zrobic Animal::collision tutaj

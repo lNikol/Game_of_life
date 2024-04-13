@@ -86,3 +86,7 @@ void Turtle::collision(Organism* org) {
 		oldY = y;
 	}
 }
+
+bool Turtle::reboundAttack(Organism* org) {
+	return true;
+}

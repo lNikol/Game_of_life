@@ -2,6 +2,7 @@
 #include "Organism.h"
 #include "World.h"
 #include <iostream>
+#include <random>
 
 class Animal : public Organism {
 protected:
@@ -26,11 +27,11 @@ public:
 	void setAge(const short& a) override;
 	void setPower(const short& pow);
 	World* getWorld() const override;
-	std::pair<const short, const short> getPosition() const override;
-	void setPosition(const short x, const short y) override;
+	void setPosition(const short& x, const short& y) override;
 	void deleteOrganism();
 	bool checkType(Animal* animal, Animal* other);
 	bool reproduction(Animal* other, const short& x, const short& y);
+	virtual bool reboundAttack(Organism* org);
 	Organism* createAnimalWithType(Organism* animal, const short& x, const short& y);
 	~Animal();
 };

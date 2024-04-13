@@ -1,6 +1,7 @@
 #include "Plant.h"
 #include <iostream>
 using namespace std;
+
 Plant::Plant(const string& ikona, const string& name, const short& power, const short& initiative,
 	const short& age, const short& x, const short& y, World* world) :
 	Organism(ikona, name, power, initiative, age, x, y, world) {
@@ -39,7 +40,7 @@ void Plant::setAge(const short& a) {
 	age = a;
 }
 
-void Plant::setPosition(const short xx, const short yy) {
+void Plant::setPosition(const short& xx, const short& yy) {
 	x = xx;
 	y = yy;
 }
@@ -51,11 +52,6 @@ void Plant::setIsMoved(bool moved) {
 
 bool Plant::getIsMoved() const {
 	return isMoved;
-}
-
-
-std::pair<const short, const short> Plant::getPosition() const {
-	return std::make_pair<const short&, const short&>(x, y);
 }
 
 void Plant::drawOrganism() const {

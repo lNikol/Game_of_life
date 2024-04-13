@@ -2,6 +2,7 @@
 #include "Organism.h"
 #include "World.h"
 #include <iostream>
+#include <random>
 
 class Plant : public Organism {
 
@@ -21,7 +22,6 @@ public:
 	World* getWorld() const override;
 	bool getIsMoved() const override;
 	void setIsMoved(bool moved);
-	std::pair<const short, const short> getPosition() const override;
-	void setPosition(const short x, const short y) override;
+	void setPosition(const short& x, const short& y) override;
 	~Plant();
 };

@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <random>
 class World;
 
 class Organism {
@@ -25,8 +24,7 @@ public:
 	virtual short getY() const = 0;
 	virtual void setAge(const short&) = 0;
 	virtual World* getWorld() const = 0; // tutaj blad podczas build
-	virtual std::pair<const short, const short> getPosition() const = 0;
-	virtual void setPosition(const short x, const short y) = 0;
+	virtual void setPosition(const short& x, const short& y) = 0;
 	virtual void deleteOrganism();
 	virtual bool getIsMoved() const = 0;
 	virtual void setIsMoved(bool moved) = 0;
