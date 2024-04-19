@@ -199,7 +199,6 @@ void Antelope::collision(Organism* org) {
 			else {
 				//cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
 			}
-			cout << "" << x << ", " << y << "\n";
 		}
 		else {
 			// bedzie walka

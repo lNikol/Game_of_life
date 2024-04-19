@@ -6,6 +6,7 @@ Turtle::Turtle(const short& x, const short& y, World* world) :
 }
 
 void Turtle::action() {
+	isMoved = true;
 	srand(time(NULL));
 	short destination = rand() % 4 + 1;
 	if (destination == 4) {

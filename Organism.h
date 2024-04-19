@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-//#include "Cell.h"
 class World;
 
 class Organism {

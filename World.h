@@ -15,7 +15,7 @@ protected:
 	std::vector<Organism*> children;
 	std::string w_string;
 public:
-	World(const short& w, const short& h);
+	World(const short& w, const short& h, const bool& fromFile);
 	void takeATurn();
 	void drawWorld();
 	Organism* getOrganism(const short& x, const short& y);

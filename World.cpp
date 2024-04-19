@@ -12,6 +12,8 @@
 #include "Human.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <regex>
 #include <Windows.h>
 #include <stdlib.h> 
 using namespace std;
@@ -19,16 +21,8 @@ using namespace std;
 //Przy uruchomieniu programu na planszy powinno się
 //pojawić po kilka sztuk wszystkich rodzajów zwierząt oraz roślin
 
-World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
+World::World(const short& w, const short& h, const bool& fromFile) : width(w + 2), height(h + 2) {
 	map.resize(height, vector<Cell*>(width));
-	ofstream logFile("log.log", ios::beg);
-	if (!logFile.is_open()) {
-		std::cout << "\n\n\nNie mozna otworzyc log.log\n\n\n";
-	}
-	else {
-		logFile << "World: height (" + to_string(height - 2) + ") width (" + to_string(width - 2) + ")\n";
-	}
-
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			map[i][j] = new Cell;
@@ -51,73 +45,170 @@ World::World(const short& w, const short& h) :width(w + 2), height(h + 2) {
 			}
 			else if (j == 0 && i == height - 1) {
 				map[i][j]->symbol = "\300";
-			}			
-		}
-	}
-
-	pair<short, short> randPos = randomPos();
-	Human* human = new Human(1, 1, this);
-	animals.push_back(human);
-	map[human->getY()][human->getX()]->org = human;
-
-	for (int i = 0; i < height; i++) {
-		for (int j = 0; j < width; j++) {
-			if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
-				if (j % 4 == 1) {
-					pair<short, short> randPos = randomPos();
-					switch ((i + j) % 5) {
-					case 0: {
-						map[randPos.second][randPos.first]->org = new Guarana(randPos.first, randPos.second, this);
-						break;
-					}
-					case 1: {
-						map[randPos.second][randPos.first]->org = new WilczeJagody(randPos.first, randPos.second, this);
-						break;
-					}
-					case 2: {
-						map[randPos.second][randPos.first]->org = new BarszczSosnowskiego(randPos.first, randPos.second, this);
-						break;
-					}
-					case 3: {
-						map[randPos.second][randPos.first]->org = new Grass(randPos.first, randPos.second, this);
-						break;
-					}
-					case 4: {
-						map[randPos.second][randPos.first]->org = new Mlecz(randPos.first, randPos.second, this);
-						break;
-					}
-					}
-					plants.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na rośliny
-				}
-				else if (j % 4 == 0) {
-					pair<short, short> randPos = randomPos();
-					switch ((i + j) % 5) {
-					case 0: {
-						map[randPos.second][randPos.first]->org = new Wolf(randPos.first, randPos.second, this);
-						break;
-					}
-					case 1: {
-						map[randPos.second][randPos.first]->org = new Sheep(randPos.first, randPos.second, this);
-						break;
-					}
-					case 2: {
-						map[randPos.second][randPos.first]->org = new Fox(randPos.first, randPos.second, this);
-						break;
-					}
-					case 3: {
-						map[randPos.second][randPos.first]->org = new Turtle(randPos.first, randPos.second, this);
-						break;
-					}
-					case 4: {
-						map[randPos.second][randPos.first]->org = new Antelope(randPos.first, randPos.second, this);
-						break;
-					}
-					}
-					animals.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na zwierzęta
-				}
 			}
 		}
 	}
+	if (fromFile) {
+		ifstream file("log.log");
+		string line;
+		if (file.is_open()) {
+			getline(file, line);
+		}
+		// Czytanie danych zwierząt
+		regex animalRegex(R"((\w+)\(x,y\): (\d+), (\d+))");
+		while (getline(file, line)) {
+			smatch match;
+			if (regex_search(line, match, animalRegex)) {
+				string org = match[1].str();
+				short x = stoi(match[2]);
+				short y = stoi(match[3]);
+				switch (org[0]) {
+					case 'A': {
+						map[y][x]->org = new Antelope(x, y, this);
+						animals.push_back(map[y][x]->org);
+						break;
+					}
+					case 'F': {
+						map[y][x]->org = new Fox(x, y, this);
+						animals.push_back(map[y][x]->org);
+						break;
+					}
+					case 'W': {
+						map[y][x]->org = new Wolf(x, y, this);
+						animals.push_back(map[y][x]->org);
+						break;
+					}
+					case 'H': {
+						map[y][x]->org = new Human(x, y, this);
+						animals.push_back(map[y][x]->org);
+						break;
+					}
+					case 'S': {
+						map[y][x]->org = new Sheep(x, y, this);
+						animals.push_back(map[y][x]->org);
+						break;
+					}
+					case 'T': {
+						map[y][x]->org = new Turtle(x, y, this);
+						animals.push_back(map[y][x]->org);
+						break;
+					}
+
+					case 'B': {
+						map[y][x]->org = new BarszczSosnowskiego(x, y, this);
+						plants.push_back(map[y][x]->org);
+						break;
+					}
+					case 'g': {
+						map[y][x]->org = new Grass(x, y, this);
+						plants.push_back(map[y][x]->org);
+						break;
+					}
+					case 'G': {
+						map[y][x]->org = new Guarana(x, y, this);
+						plants.push_back(map[y][x]->org);
+						break;
+					}
+					case 'M': {
+						map[y][x]->org = new Mlecz(x, y, this);
+						plants.push_back(map[y][x]->org);
+						break;
+					}
+					case 'J': {
+						map[y][x]->org = new WilczeJagody(x, y, this);
+						plants.push_back(map[y][x]->org);
+						break;
+					}
+					default: {
+						cout << "Other type while reading inputfile: " << org << endl;
+						break;
+					}
+				}
+			}
+		}
+		file.close();
+	}
+	else {
+		ofstream logFile("log.log", ios::beg);
+		if (!logFile.is_open()) {
+			std::cout << "\n\n\nNie mozna otworzyc log.log\n\n\n";
+		}
+		else {
+			logFile << "World: height (" + to_string(height - 2) + ") width (" + to_string(width - 2) + ")\n";
+		}
+		logFile.close();
+
+		pair<short, short> randPos = randomPos();
+		Human* human = new Human(1, 1, this);
+		animals.push_back(human);
+		map[human->getY()][human->getX()]->org = human;
+
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				if ((j >= 1 && j < width - 1) && (i >= 1 && i < height - 1)) {
+					if (j % 4 == 1) {
+						pair<short, short> randPos = randomPos();
+						switch ((i + j) % 5) {
+						case 0: {
+							map[randPos.second][randPos.first]->org = new Guarana(randPos.first, randPos.second, this);
+							break;
+						}
+						case 1: {
+							map[randPos.second][randPos.first]->org = new WilczeJagody(randPos.first, randPos.second, this);
+							break;
+						}
+						case 2: {
+							map[randPos.second][randPos.first]->org = new BarszczSosnowskiego(randPos.first, randPos.second, this);
+							break;
+						}
+						case 3: {
+							map[randPos.second][randPos.first]->org = new Grass(randPos.first, randPos.second, this);
+							break;
+						}
+						case 4: {
+							map[randPos.second][randPos.first]->org = new Mlecz(randPos.first, randPos.second, this);
+							break;
+						}
+						}
+						plants.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na rośliny
+					}
+					else if (j % 4 == 0) {
+						pair<short, short> randPos = randomPos();
+						switch ((i + j) % 5) {
+						case 0: {
+							map[randPos.second][randPos.first]->org = new Wolf(randPos.first, randPos.second, this);
+							break;
+						}
+						case 1: {
+							map[randPos.second][randPos.first]->org = new Sheep(randPos.first, randPos.second, this);
+							break;
+						}
+						case 2: {
+							map[randPos.second][randPos.first]->org = new Fox(randPos.first, randPos.second, this);
+							break;
+						}
+						case 3: {
+							map[randPos.second][randPos.first]->org = new Turtle(randPos.first, randPos.second, this);
+							break;
+						}
+						case 4: {
+							map[randPos.second][randPos.first]->org = new Antelope(randPos.first, randPos.second, this);
+							break;
+						}
+						}
+						animals.push_back(map[randPos.second][randPos.first]->org); // robię vector wskaźników na zwierzęta
+					}
+				}
+			}
+		}
+		for (int i = 0; i < animals.size(); i++) {
+			animals[i]->writeToLog();
+		}
+		for (int i = 0; i < plants.size(); i++) {
+			plants[i]->writeToLog();
+		}
+	}
+	
 }
 
 void World::drawWorld() {
@@ -251,14 +342,6 @@ short World::getHeight() const {
 void World::takeATurn() {
 	if (isEnd) return;
 	else {
-		ofstream logFile("log.log", ios::app);
-		if (!logFile.is_open()) {
-			std::cout << "\n\n\nNie mozna otworzyc log.log\n\n\n";
-		}
-		else {
-			logFile << "\n\n\n\n\n\n";
-		}
-
 		short childrenSize = children.size();
 		for (int i = 0; i < childrenSize; i++) {
 			if (children[i] != nullptr) {
@@ -276,7 +359,6 @@ void World::takeATurn() {
 		for (int i = 0; i < anSize; i++) {
 			animals[i]->setIsMoved(false);
 			dynamic_cast<Animal*>(animals[i])->setAge(dynamic_cast<Animal*>(animals[i])->getAge() + 1);
-			animals[i]->writeToLog();
 			//cout <<"XY: " << animals[i]->getX() << " " << animals[i]->getY() << endl;
 		}
 
@@ -295,18 +377,13 @@ void World::takeATurn() {
 		short plSize = plants.size();
 		for (int i = 0; i < plSize; i++) {
 			plants[i]->setIsMoved(false);
-			plants[i]->writeToLog();
 		}
-
 
 		for (auto* animal : animals) {
 			if (dynamic_cast<Animal*>(animal) != nullptr) {
 				if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
 					animal->action();
 					drawWorld();
-				}
-				if (animal->getX() == -1) {
-					break;
 				}
 			}
 		}

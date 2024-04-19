@@ -14,6 +14,7 @@ void Human::ability() {
 }
 
 void Human::action() {
+	cout << "Your turn\n";
 	srand(time(NULL));
 	// zastanowic sie jak lepiej zrobic Animal::collision tutaj
 	// wychodzą te same linijki w 3 miejscach w jednym if
