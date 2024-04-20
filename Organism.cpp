@@ -9,17 +9,16 @@ Organism::Organism(const string& ikona, const string& name, const short& power,
 	ikona(ikona), name(name), power(power), initiative(initiative), x(x), y(y), world(w) {
 };
 
+string Organism::drawOrganism() const {
+	return ikona;
+}
+
 void Organism::deleteOrganism() {
 	power = -1;
 	initiative = -1;
 	x = -1;
 	y = -1;
 }
-
-string Organism::drawOrganism() const {
-	return ikona;
-}
-
 
 void Organism::writeToLog() {
 	ofstream logFile("log.log", ios::app);

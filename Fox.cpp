@@ -300,8 +300,5 @@ void Fox::action() {
 			}
 		}
 	}
-	else {
-		//cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
-	}
 	cout << "" << x << ", " << y << "\n";
 }

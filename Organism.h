@@ -15,17 +15,13 @@ public:
 	virtual void action() = 0;
 	virtual void collision(Organism* org) = 0;
 	virtual std::string drawOrganism() const;
-	virtual std::string getName() const = 0;
 	virtual short getPower() const = 0;
 	virtual short getInitiative() const = 0;
 	virtual short getX() const = 0;
 	virtual short getY() const = 0;
-	virtual World* getWorld() const = 0; // tutaj blad podczas build
-	virtual void setPosition(const short& x, const short& y) = 0;
+	virtual World* getWorld() const = 0;
 	virtual void deleteOrganism();
 	virtual bool getIsMoved() const = 0;
 	virtual void setIsMoved(bool moved) = 0;
 	virtual void writeToLog();
-	//virtual ~Organism() = 0;
-
 };

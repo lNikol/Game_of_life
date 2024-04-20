@@ -6,4 +6,5 @@ public:
 	void action() override;
 	void move() override;
 	void collision(Organism* org) override;
+	void checkCellsAround(Organism* org);
 };

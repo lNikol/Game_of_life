@@ -11,9 +11,8 @@ public:
 	Animal(const std::string& ikona, const std::string& name, const short& power, const short& initiative,
 		const short& age, const short& x, const short& y, World* world);
 	void action() override;
-	virtual void move(); // 0
+	virtual void move();
 	void collision(Organism* org) override;
-	std::string getName() const override;
 	short getX() const override;
 	short getY() const override;
 	short getOldX() const;
@@ -22,11 +21,11 @@ public:
 	short getInitiative() const override;
 	short getAge() const;
 	bool getIsMoved() const override;
+	std::string getName() const;
 	void setIsMoved(bool moved);
 	void setAge(const short& a);
 	void setPower(const short& pow);
 	World* getWorld() const override;
-	void setPosition(const short& x, const short& y) override;
 	void deleteOrganism();
 	bool checkType(Animal* animal, Animal* other);
 	bool reproduction(Animal* other, const short& x, const short& y);

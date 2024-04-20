@@ -14,259 +14,10 @@ Animal::Animal(const string& ikona, const string& name, const short& power, cons
 	Organism(ikona, name, power, initiative, x, y, world), age(age), oldX(x), oldY(y) {
 }
 
-Organism* Animal::createAnimalWithType(Organism* animal, const short& x, const short& y) {
-	auto cast = dynamic_cast<Animal*>(animal);
-	if (dynamic_cast<Antelope*>(cast)) {
-		return new Antelope(x, y, animal->getWorld());
-	}
-	else if (dynamic_cast<Fox*>(cast)) {
-		return new Fox(x, y, animal->getWorld());
-	}
-	else if (dynamic_cast<Sheep*>(cast)) {
-		return new Sheep(x, y, animal->getWorld());
-	}
-	else if (dynamic_cast<Turtle*>(cast)) {
-		return new Turtle(x, y, animal->getWorld());
-	}
-	else if (dynamic_cast<Wolf*>(cast)) {
-		return new Wolf(x, y, animal->getWorld());
-	}
-	else {
-		//cout << "\nThe absence of this type of animal or the organism is not an animal\n";
-		return nullptr;
-	}
-}
-
-bool Animal::checkType(Animal* animal, Animal* other) {
-	return typeid(*animal) == typeid(*other);
-}
-
-World* Animal::getWorld() const {
-	return world;
-}
-
-std::string Animal::getName() const {
-	return name;
-};
-
-short Animal::getPower() const {
-	return power;
-}
-
-short Animal::getInitiative() const {
-	return initiative;
-}
-
-short Animal::getX() const {
-	return this->x;
-}
-
-short Animal::getY() const {
-	return this->y;
-}
-
-short Animal::getOldX() const {
-	return oldX;
-}
-
-short Animal::getOldY() const {
-	return oldY;
-}
-
-short Animal::getAge() const {
-	return age;
-}
-
-void Animal::setAge(const short& a) {
-	age = a;
-}
-
-void Animal::setPower(const short& pow) {
-	power = pow;
-}
-
-bool Animal::getIsMoved() const {
-	return isMoved;
-}
-
-void Animal::setIsMoved(bool moved) {
-	isMoved = moved;
-}
-
-void Animal::setPosition(const short& xx, const short& yy) {
-	x = xx;
-	y = yy;
-}
-
-bool Animal::reproduction(Animal* other, const short& x, const short& y) {
-	short width = world->getWidth() - 2;
-	short height = world->getHeight() - 2;
-	// zostanie wywołana podczas sprawdzenia kto jest na klatce
-	// zalozenie, ze [other] tego samego typu co i animal (wilk i wilk np.)
-	if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
-		if (y == 1) {
-			if (x == 1) {
-				if (world->getOrganism(x + 1, y) == nullptr) {
-					// jako opcja zamienić te dwie linijki na funkcję
-					// world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1 , y);
-					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
-					return true;
-				}
-				else if (world->getOrganism(x, y + 1) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
-					return true;
-				}
-				else {
-					//cout << "There are no empty cells around " << name << endl;
-					return false;
-				}
-			}
-			else if (x == width) {
-				if (world->getOrganism(x - 1, y) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
-					return true;
-				}
-				else if (world->getOrganism(x, y + 1) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
-					return true;
-				}
-				else {
-					//cout << "There are no empty cells around " << name << endl;
-					return false;
-				}
-			}
-			else {
-				if (world->getOrganism(x - 1, y) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
-					return true;
-				}
-				else if (world->getOrganism(x + 1, y) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
-					return true;
-				}
-				else if (world->getOrganism(x, y + 1) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
-					return true;
-				}
-				else {
-					//cout << "There are no empty cells around " << name << endl;
-					return false;
-				}
-			}
-		}
-		else if (y == height) {
-			if (x == 1) {
-				if (world->getOrganism(x + 1, y) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
-					return true;
-				}
-				else if (world->getOrganism(x, y - 1) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
-					return true;
-				}
-				else {
-					//cout << "There are no empty cells around " << name << endl;
-					return false;
-				}
-			}
-			else if (x == width) {
-				if (world->getOrganism(x, y - 1) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
-					return true;
-				}
-				else if (world->getOrganism(x - 1, y) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
-					return true;
-				}
-				else {
-					//cout << "There are no empty cells around " << name << endl;
-					return false;
-				}
-			}
-			else {
-				if (world->getOrganism(x - 1, y) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
-					return true;
-				}
-				else if (world->getOrganism(x + 1, y) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
-					return true;
-				}
-				else if (world->getOrganism(x, y - 1) == nullptr) {
-					world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
-					return true;
-				}
-				else {
-				//	cout << "There are no empty cells around " << name << endl;
-					return false;
-				}
-			}
-		}
-		else if (x == width && (y >= 2 && y < height)) {
-			if (world->getOrganism(x - 1, y) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
-				return true;
-			}
-			else if (world->getOrganism(x, y - 1) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
-				return true;
-			}
-			else if (world->getOrganism(x, y + 1) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
-				return true;
-			}
-			else {
-				//cout << "There are no empty cells around " << name << endl;
-				return false;
-			}
-		}
-		else if (x == 1 && (y >= 2 && y < height)) {
-			if (world->getOrganism(x + 1, y) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
-				return true;
-			}
-			else if (world->getOrganism(x, y - 1) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
-				return true;
-			}
-			else if (world->getOrganism(x, y + 1) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
-				return true;
-			}
-			else {
-				//cout << "There are no empty cells around " << name << endl;
-				return false;
-			}
-		}
-		else {
-			if (world->getOrganism(x - 1, y) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
-				return true;
-			}
-			else if (world->getOrganism(x, y - 1) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
-				return true;
-			}
-			else if (world->getOrganism(x, y + 1) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
-				return true;
-			}
-			else if (world->getOrganism(x + 1, y) == nullptr) {
-				world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
-				return true;
-			}
-			else {
-				//cout << "There are no empty cells around " << name << endl;
-				return false;
-			}
-		}
-		return false;
-	}
-	return false;
-}
-
-bool Animal::reboundAttack(Organism* org) {
-	return false;
+void Animal::action() {
+	isMoved = true;
+	move();
+	collision(world->getOrganism(x, y));
 }
 
 void Animal::move() {
@@ -433,18 +184,9 @@ void Animal::move() {
 			}
 		}
 	}
-	else {
-		//cout << "\npoza granica (x,y): " << x << ", " << y << ")\n";
-	}
-	
 
-	cout << "" << x << ", " << y << "\n";
-}
 
-void Animal::action() {
-	isMoved = true;
-	move();
-	collision(world->getOrganism(x, y));
+	cout << x << ", " << y << "\n";
 }
 
 void Animal::collision(Organism* other) {
@@ -452,14 +194,7 @@ void Animal::collision(Organism* other) {
 		if (checkType(this, dynamic_cast<Animal*>(other))) {
 			if (reproduction(this, oldX, oldY) == false) {
 				if (reproduction(dynamic_cast<Animal*>(other), other->getX(), other->getY()) == false) {
-					//cout << "Couldn't add a child\n";
 				}
-				else {
-					//cout << "Child was added from second\n";
-				}
-			}
-			else {
-				//cout << "Child was added from first\n";
 			}
 			x = oldX;
 			y = oldY;
@@ -483,14 +218,11 @@ void Animal::collision(Organism* other) {
 					Animal* oth = dynamic_cast<Animal*>(other);
 					if (oth->reboundAttack(this)) {
 						//usuwam napastnika
-						//cout << "\n\nThe attack was rebounded\n\n";
 						world->deleteOrganism(this, oldX, oldY);
 					}
 					else {
 						if (power >= otherPower) {
-							/*cout << "I (" << name << ", " << x << ", " << y << ") killed (" << other->getName() << ", "
-								<< other->getX() << ", " << other->getY() << ") end go to the position (" << x << ", " << y << ")\n";
-							*/world->deleteOrganism(oth, oth->getX(), oth->getY());
+							world->deleteOrganism(oth, oth->getX(), oth->getY());
 							world->replaceOrganism(this, x, y);
 							world->deleteOrganism(nullptr, oldX, oldY);
 
@@ -498,12 +230,10 @@ void Animal::collision(Organism* other) {
 							oldY = y;
 						}
 						else {
-							/*cout << "I (" << name << ", " << x << ", " << y << ") was killed by (" << other->getName()
-								<< ", " << other->getX() << ", " << other->getY() << ") clear map by my old position\n";
-							*/world->deleteOrganism(this, oldX, oldY);
+							world->deleteOrganism(this, oldX, oldY);
 						}
 					}
-					
+
 				}
 			}
 		}
@@ -524,6 +254,57 @@ void Animal::collision(Organism* other) {
 	}
 }
 
+short Animal::getX() const {
+	return this->x;
+}
+
+short Animal::getY() const {
+	return this->y;
+}
+
+short Animal::getOldX() const {
+	return oldX;
+}
+
+short Animal::getOldY() const {
+	return oldY;
+}
+
+short Animal::getPower() const {
+	return power;
+}
+
+short Animal::getInitiative() const {
+	return initiative;
+}
+
+short Animal::getAge() const {
+	return age;
+}
+
+bool Animal::getIsMoved() const {
+	return isMoved;
+}
+
+string Animal::getName() const{
+	return name;
+}
+
+void Animal::setIsMoved(bool moved) {
+	isMoved = moved;
+}
+
+void Animal::setAge(const short& a) {
+	age = a;
+}
+
+void Animal::setPower(const short& pow) {
+	power = pow;
+}
+
+World* Animal::getWorld() const {
+	return world;
+}
 
 void Animal::deleteOrganism() {
 	oldX = -1;
@@ -532,6 +313,193 @@ void Animal::deleteOrganism() {
 	Organism::deleteOrganism();
 }
 
+bool Animal::checkType(Animal* animal, Animal* other) {
+	return typeid(*animal) == typeid(*other);
+}
+
+bool Animal::reproduction(Animal* other, const short& x, const short& y) {
+	short width = world->getWidth() - 2;
+	short height = world->getHeight() - 2;
+	// zostanie wywołana podczas sprawdzenia kto jest na klatce
+	// zalozenie, ze [other] tego samego typu co i animal (wilk i wilk np.)
+	if ((x >= 1 && x <= width) && (y >= 1 && y <= height)) {
+		if (y == 1) {
+			if (x == 1) {
+				if (world->getOrganism(x + 1, y) == nullptr) {
+					// jako opcja zamienić te dwie linijki na funkcję
+					// world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1 , y);
+					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
+					return true;
+				}
+				else if (world->getOrganism(x, y + 1) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else if (x == width) {
+				if (world->getOrganism(x - 1, y) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
+					return true;
+				}
+				else if (world->getOrganism(x, y + 1) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				if (world->getOrganism(x - 1, y) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
+					return true;
+				}
+				else if (world->getOrganism(x + 1, y) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
+					return true;
+				}
+				else if (world->getOrganism(x, y + 1) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		}
+		else if (y == height) {
+			if (x == 1) {
+				if (world->getOrganism(x + 1, y) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
+					return true;
+				}
+				else if (world->getOrganism(x, y - 1) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else if (x == width) {
+				if (world->getOrganism(x, y - 1) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
+					return true;
+				}
+				else if (world->getOrganism(x - 1, y) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				if (world->getOrganism(x - 1, y) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
+					return true;
+				}
+				else if (world->getOrganism(x + 1, y) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
+					return true;
+				}
+				else if (world->getOrganism(x, y - 1) == nullptr) {
+					world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		}
+		else if (x == width && (y >= 2 && y < height)) {
+			if (world->getOrganism(x - 1, y) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
+				return true;
+			}
+			else if (world->getOrganism(x, y - 1) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
+				return true;
+			}
+			else if (world->getOrganism(x, y + 1) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else if (x == 1 && (y >= 2 && y < height)) {
+			if (world->getOrganism(x + 1, y) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
+				return true;
+			}
+			else if (world->getOrganism(x, y - 1) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
+				return true;
+			}
+			else if (world->getOrganism(x, y + 1) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			if (world->getOrganism(x - 1, y) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x - 1, y), x - 1, y);
+				return true;
+			}
+			else if (world->getOrganism(x, y - 1) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x, y - 1), x, y - 1);
+				return true;
+			}
+			else if (world->getOrganism(x, y + 1) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x, y + 1), x, y + 1);
+				return true;
+			}
+			else if (world->getOrganism(x + 1, y) == nullptr) {
+				world->addOrganism(createAnimalWithType(other, x + 1, y), x + 1, y);
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		return false;
+	}
+	return false;
+}
+
+bool Animal::reboundAttack(Organism* org) {
+	return false;
+}
+
+Organism* Animal::createAnimalWithType(Organism* animal, const short& x, const short& y) {
+	auto cast = dynamic_cast<Animal*>(animal);
+	if (dynamic_cast<Antelope*>(cast)) {
+		return new Antelope(x, y, animal->getWorld());
+	}
+	else if (dynamic_cast<Fox*>(cast)) {
+		return new Fox(x, y, animal->getWorld());
+	}
+	else if (dynamic_cast<Sheep*>(cast)) {
+		return new Sheep(x, y, animal->getWorld());
+	}
+	else if (dynamic_cast<Turtle*>(cast)) {
+		return new Turtle(x, y, animal->getWorld());
+	}
+	else if (dynamic_cast<Wolf*>(cast)) {
+		return new Wolf(x, y, animal->getWorld());
+	}
+	else {
+		return nullptr;
+	}
+}
 
 Animal::~Animal() {
 	//cout << "~Animal " << this << endl;

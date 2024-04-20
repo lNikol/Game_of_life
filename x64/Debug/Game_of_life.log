@@ -1,4 +1,7 @@
-﻿  Animal.cpp
-  World.cpp
-  Generating Code...
+﻿  World.cpp
+E:\Programming\C++\PO\Projects\Game_of_life\Game_of_life\World.cpp(213,22): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
+E:\Programming\C++\PO\Projects\Game_of_life\Game_of_life\World.cpp(226,16): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
+E:\Programming\C++\PO\Projects\Game_of_life\Game_of_life\World.cpp(244,16): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
+E:\Programming\C++\PO\Projects\Game_of_life\Game_of_life\World.cpp(360,23): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
+E:\Programming\C++\PO\Projects\Game_of_life\Game_of_life\World.cpp(396,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Game_of_life.vcxproj -> E:\Programming\C++\PO\Projects\Game_of_life\x64\Debug\Game_of_life.exe

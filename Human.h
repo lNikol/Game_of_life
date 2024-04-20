@@ -8,6 +8,5 @@ private:
 	bool isAbilityKeyOn = false;
 public:
 	Human(const short& x, const short& y, World* world);
-	void ability();
 	void action() override;
 };

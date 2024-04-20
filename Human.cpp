@@ -8,18 +8,9 @@ Human::Human(const short& x, const short& y, World* world) :
 	cout << "Human (" << name << ", " << x << ", " << y << ") was created\n";
 }
 
-
-void Human::ability() {
-	cout << "Human ability\n";
-}
-
 void Human::action() {
 	cout << "Your turn\n";
 	srand(time(NULL));
-	// zastanowic sie jak lepiej zrobic Animal::collision tutaj
-	// wychodzą te same linijki w 3 miejscach w jednym if
-	// dodac warunki na wlaczenie/wylaczenie umietnosci
-	// counterAfterAbility
 	oldX = x;
 	oldY = y;
  
@@ -27,7 +18,7 @@ void Human::action() {
 	short width = world->getWidth() - 2;
 	short key;
 	bool isPressed = false;
-	if (counterAfterAbility >= 5) {
+	if (counterAfterAbility >= 8) {
 		isAbilityOn = false;
 		isAbilityKeyOn = false;
 		counterAfterAbility = 0;
@@ -48,7 +39,6 @@ void Human::action() {
 					isMoved = true;
 					isPressed = true;
 					if (isAbilityOn && counterAfterAbility <= 2) {
-					inAbility_Y_minus_2:
 						if (y - 2 >= 1) {
 							y -= 2;
 						}
@@ -61,7 +51,14 @@ void Human::action() {
 					else if (counterAfterAbility > 2 && isAbilityOn) {
 						short r = rand() % 2;
 						if (r == 1) {
-							goto inAbility_Y_minus_2;
+							if (y - 2 >= 1) {
+								y -= 2;
+							}
+							else {
+								cout << "You cannot move two squares (you will move one square) because there is a border there \n";
+								y -= 1;
+							}
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							y -= 1;
@@ -88,7 +85,6 @@ void Human::action() {
 					isMoved = true;
 					isPressed = true;
 					if (isAbilityOn && counterAfterAbility <= 2) {
-					inAbility_Y_plus_2:
 						if (y + 2 <= height) {
 							y += 2;
 						}
@@ -101,7 +97,14 @@ void Human::action() {
 					else if (counterAfterAbility > 2 && isAbilityOn) {
 						short r = rand() % 2;
 						if (r == 1) {
-							goto inAbility_Y_plus_2;
+							if (y + 2 <= height) {
+								y += 2;
+							}
+							else {
+								cout << "You cannot move two squares (you will move one square) because there is a border there \n";
+								y += 1;
+							}
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							y += 1;
@@ -128,7 +131,6 @@ void Human::action() {
 					isMoved = true;
 					isPressed = true;
 					if (isAbilityOn && counterAfterAbility <= 2) {
-					inAbility_X_minus_2:
 						if (x - 2 >= 1) {
 							x -= 2;
 						}
@@ -141,7 +143,14 @@ void Human::action() {
 					else if (counterAfterAbility > 2 && isAbilityOn) {
 						short r = rand() % 2;
 						if (r == 1) {
-							goto inAbility_X_minus_2;
+							if (x - 2 >= 1) {
+								x -= 2;
+							}
+							else {
+								cout << "You cannot move two squares (you will move one square) because there is a border there \n";
+								x -= 1;
+							}
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							x -= 1;
@@ -168,7 +177,6 @@ void Human::action() {
 					isMoved = true;
 					isPressed = true;
 					if (isAbilityOn && counterAfterAbility <= 2) {
-					inAbility_X_plus_2:
 						if (x + 2 <= width) {
 							x += 2;
 						}
@@ -181,7 +189,14 @@ void Human::action() {
 					else if (counterAfterAbility > 2 && isAbilityOn) {
 						short r = rand() % 2;
 						if (r == 1) {
-							goto inAbility_X_plus_2;
+							if (x + 2 <= width) {
+								x += 2;
+							}
+							else {
+								cout << "You cannot move two squares (you will move one square) because there is a border there \n";
+								x += 1;
+							}
+							Animal::collision(world->getOrganism(x, y));
 						}
 						else {
 							x += 1;
@@ -209,11 +224,11 @@ void Human::action() {
 				isAbilityKeyOn = true;
 				counterAfterAbility = 0;
 				isAbilityOn = true;
-				cout << "\n\n\nThe ability was activated\n\n\n";
+				cout << "\nThe ability was activated\n";
 			}
 			else {
 				isAbilityKeyOn = false;
-				cout << "\n\nThe ability cannot be activated\n\n";
+				cout << "\nThe ability cannot be activated\n";
 			}
 		}
 

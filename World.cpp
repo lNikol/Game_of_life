@@ -15,11 +15,7 @@
 #include <sstream>
 #include <regex>
 #include <Windows.h>
-#include <stdlib.h> 
 using namespace std;
-
-//Przy uruchomieniu programu na planszy powinno się
-//pojawić po kilka sztuk wszystkich rodzajów zwierząt oraz roślin
 
 World::World(const short& w, const short& h, const bool& fromFile) : width(w + 2), height(h + 2) {
 	map.resize(height, vector<Cell*>(width));
@@ -211,55 +207,75 @@ World::World(const short& w, const short& h, const bool& fromFile) : width(w + 2
 	
 }
 
+void World::takeATurn() {
+	if (isEnd) return;
+	else {
+		short childrenSize = children.size();
+		for (int i = 0; i < childrenSize; i++) {
+			if (children[i] != nullptr) {
+				if (dynamic_cast<Animal*>(children[i])) {
+					animals.push_back(children[i]);
+				}
+				else if (dynamic_cast<Plant*>(children[i])) {
+					plants.push_back(children[i]);
+				}
+			}
+		}
+		children.clear();
+
+		short anSize = animals.size();
+		for (int i = 0; i < anSize; i++) {
+			animals[i]->setIsMoved(false);
+			dynamic_cast<Animal*>(animals[i])->setAge(dynamic_cast<Animal*>(animals[i])->getAge() + 1);
+		}
+
+		// sortowanie po inicjatywie i wieku
+		sort(animals.begin(), animals.end(),
+			[](Organism* a, Organism* b) {
+				if (a->getInitiative() == b->getInitiative()) {
+					return (dynamic_cast<Animal*>(a)->getAge() > dynamic_cast<Animal*>(b)->getAge());
+				}
+				else {
+					return a->getInitiative() > b->getInitiative();
+				}
+			});
+
+
+		short plSize = plants.size();
+		for (int i = 0; i < plSize; i++) {
+			plants[i]->setIsMoved(false);
+		}
+		drawWorld();
+
+		for (auto* animal : animals) {
+			if (dynamic_cast<Animal*>(animal) != nullptr) {
+				if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
+					animal->action();
+					drawWorld();
+				}
+			}
+		}
+
+		for (auto* plant : plants) {
+			if (!dynamic_cast<Plant*>(plant)->getIsMoved() && plant->getX() != -1) {
+				plant->action();
+			}
+			if (plant->getX() == -1) {
+				break;
+			}
+		}
+		drawWorld();
+	}
+}
+
 void World::drawWorld() {
-	// zrobic oczyszczenie mapy kiedy ktos pochodzi
-	Sleep(350);
+	Sleep(500);
 	system("cls");
 	cout << "Author: Nikolai Lavrinov 201302\n";
 	cout << "Press o to active the skill\n";
 	cout << "A - Antelope, F - Fox, W - Wolf\nH - Human, S - Sheep, T - Turtle\n";
 	cout << "B - Barszcz, g - Grass, G - Guarana\nM - Mlecz, J - WilczeJagody\n\n";
 	cout << worldToString();
-}
-
-bool World::getIsEnd() const {
-	return isEnd;
-}
-
-string World::worldToString() {
-	w_string = "";
-	for (int i = 0; i < height; i++) {
-		for (int j = 0; j < width; j++) {
-			string symbol = map[i][j]->symbol;
-			if (symbol == "") {
-				auto org = getOrganism(j, i);
-				if (org != nullptr) {
-					// zamienić na metodę drawOrganism()
-					symbol = org->drawOrganism();
-				}
-				else {
-					symbol = ".";
-				}
-			}
-			w_string += symbol;
-		}
-		w_string += '\n';
-	}
-	w_string += '\n';
-	return w_string;
-}
-
-pair<short, short> World::randomPos() {
-	srand(time(NULL));
-	short h = height - 2;
-	short w = width - 2;
-	short x = rand() % w + 1;
-	short y = rand() % h + 1;
-	while (getOrganism(x, y) != nullptr) {
-		x = rand() % w + 1;
-		y = rand() % h + 1;
-	}
-	return make_pair<short&, short&>(x, y);
 }
 
 Organism* World::getOrganism(const short& x, const short& y) {
@@ -276,17 +292,50 @@ Organism* World::getOrganism(const short& x, const short& y) {
 	}
 }
 
+void World::setOrganism(Organism* plant, const short& x, const short& y) {
+	if (getOrganism(x, y) == nullptr) {
+		Plant* cast = dynamic_cast<Plant*>(plant);
+		if (dynamic_cast<Grass*>(cast)) {
+			map[y][x]->org = new Grass(x, y, this);
+		}
+		else if (dynamic_cast<Guarana*>(cast)) {
+			map[y][x]->org = new Guarana(x, y, this);
+		}
+		else if (dynamic_cast<Mlecz*>(cast)) {
+			map[y][x]->org = new Mlecz(x, y, this);
+		}
+		else if (dynamic_cast<WilczeJagody*>(cast)) {
+			map[y][x]->org = new WilczeJagody(x, y, this);
+		}
+		else if (dynamic_cast<BarszczSosnowskiego*>(cast)) {
+			map[y][x]->org = new BarszczSosnowskiego(x, y, this);
+		}
+		if (map[y][x]->org != nullptr) {
+			children.push_back(map[y][x]->org);
+		}
+	}
+}
+
+void World::addOrganism(Organism* org, const short& x, const short& y) {
+	if (dynamic_cast<Animal*>(org)) {
+		map[y][x]->org = org;
+		children.push_back(org);
+	}
+	else if (dynamic_cast<Plant*>(org)) {
+		map[y][x]->org = org;
+		children.push_back(org);
+	}
+}
+
 void World::deleteOrganism(Organism* org, const short& x, const short& y) {
 	if (org != nullptr) {
-		//cout << "World::deleteOrganism: " << org->getName();
-		//cout << " " << org->getX() << " " << org->getY() << endl;
 		map[y][x]->org = nullptr;
 		map[y][x]->symbol = "";
 		bool isDeleted = false;
 		if (dynamic_cast<Animal*>(org)) {
 			if (dynamic_cast<Human*>(org)) {
 				isEnd = true;
-				cout << "\n\n\n\n\n\n\n\n\n\n\nYou was killed\n\n\n\n\n\n\n\n\n\n";
+				cout << "\n\n\n\n\n\n\n\nYou was killed\n\n\n\n\n\n\n";
 			}
 			for (int i = 0; i < animals.size(); i++) {
 				if (animals[i] == org) {
@@ -339,107 +388,42 @@ short World::getHeight() const {
 	return height;
 }
 
-void World::takeATurn() {
-	if (isEnd) return;
-	else {
-		short childrenSize = children.size();
-		for (int i = 0; i < childrenSize; i++) {
-			if (children[i] != nullptr) {
-				if (dynamic_cast<Animal*>(children[i])) {
-					animals.push_back(children[i]);
-				}
-				else if (dynamic_cast<Plant*>(children[i])) {
-					plants.push_back(children[i]);
-				}
-			}
-		}
-		children.clear();
+bool World::getIsEnd() const {
+	return isEnd;
+}
 
-		short anSize = animals.size();
-		for (int i = 0; i < anSize; i++) {
-			animals[i]->setIsMoved(false);
-			dynamic_cast<Animal*>(animals[i])->setAge(dynamic_cast<Animal*>(animals[i])->getAge() + 1);
-			//cout <<"XY: " << animals[i]->getX() << " " << animals[i]->getY() << endl;
-		}
+pair<short, short> World::randomPos() {
+	srand(time(NULL));
+	short h = height - 2;
+	short w = width - 2;
+	short x = rand() % w + 1;
+	short y = rand() % h + 1;
+	while (getOrganism(x, y) != nullptr) {
+		x = rand() % w + 1;
+		y = rand() % h + 1;
+	}
+	return make_pair<short&, short&>(x, y);
+}
 
-		// sortowanie po inicjatywie i wieku
-		sort(animals.begin(), animals.end(),
-			[](Organism* a, Organism* b) {
-				if (a->getInitiative() == b->getInitiative()) {
-					return (dynamic_cast<Animal*>(a)->getAge() > dynamic_cast<Animal*>(b)->getAge());
+string World::worldToString() {
+	w_string = "";
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			string symbol = map[i][j]->symbol;
+			if (symbol == "") {
+				auto org = getOrganism(j, i);
+				if (org != nullptr) {
+					// zamienić na metodę drawOrganism()
+					symbol = org->drawOrganism();
 				}
 				else {
-					return a->getInitiative() > b->getInitiative();
-				}
-			});
-
-
-		short plSize = plants.size();
-		for (int i = 0; i < plSize; i++) {
-			plants[i]->setIsMoved(false);
-		}
-
-		for (auto* animal : animals) {
-			if (dynamic_cast<Animal*>(animal) != nullptr) {
-				if (!dynamic_cast<Animal*>(animal)->getIsMoved() && animal->getX() != -1) {
-					animal->action();
-					drawWorld();
+					symbol = ".";
 				}
 			}
+			w_string += symbol;
 		}
-
-		for (auto* plant : plants) {
-			if (!dynamic_cast<Plant*>(plant)->getIsMoved() && plant->getX() != -1) {
-				plant->action();
-			}
-			if (plant->getX() == -1) {
-				break;
-			}
-		}
-		drawWorld();
+		w_string += '\n';
 	}
-}
-
-void World::addOrganism(Organism* org, const short& x, const short& y) {
-	if (dynamic_cast<Animal*>(org)) {
-		map[y][x]->org = org;
-		children.push_back(org);
-	}
-	else if (dynamic_cast<Plant*>(org)) {
-		map[y][x]->org = org;
-		children.push_back(org);
-	}
-	else if (org == nullptr) {
-		//cout << "It is not possible to add an organism\n";
-	}
-}
-
-void World::setOrganism(Organism* plant, const short& x, const short& y) {
-	if (getOrganism(x, y) == nullptr) {
-		Plant* cast = dynamic_cast<Plant*>(plant);
-		if (dynamic_cast<Grass*>(cast)) {
-			map[y][x]->org = new Grass(x, y, this);
-		}
-		else if (dynamic_cast<Guarana*>(cast)) {
-			map[y][x]->org = new Guarana(x, y, this);
-		}
-		else if (dynamic_cast<Mlecz*>(cast)) {
-			map[y][x]->org = new Mlecz(x, y, this);
-		}
-		else if (dynamic_cast<WilczeJagody*>(cast)) {
-			map[y][x]->org = new WilczeJagody(x, y, this);
-		}
-		else if (dynamic_cast<BarszczSosnowskiego*>(cast)) {
-			map[y][x]->org = new BarszczSosnowskiego(x, y, this);
-		}
-		else {
-			//cout << "\nbrak tego gotunku czy inny błąd\n";
-		}
-		if (map[y][x]->org != nullptr) {
-			children.push_back(map[y][x]->org);
-		}
-	}
-	else {
-		//cout << "The plant could not be added, the cell is occupied\n";
-	}
+	w_string += '\n';
+	return w_string;
 }
